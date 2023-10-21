@@ -23,6 +23,7 @@
     "sucrase": "^3.34.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.5",
     "@types/express": "^4.17.20"
   }
 }
