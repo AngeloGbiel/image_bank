@@ -1,7 +1,6 @@
 import express from 'express'
 import {sequelize} from './db/conn'
-import router from './Routes/route'
-
+import UserRouter from './Routes/UserRouter'
 
 const app = express()
 const port: number = 3000
@@ -9,7 +8,7 @@ const port: number = 3000
 app.use(express.json());
 
 // Adicionando rotas
-app.use(router)
+app.use(UserRouter)
 
 sequelize
 //.sync({force:true})
