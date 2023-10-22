@@ -1,5 +1,5 @@
 import express from 'express'
-import conn from './db/conn'
+import {sequelize} from './db/conn'
 import router from './Routes/route'
 
 
@@ -11,7 +11,7 @@ app.use(express.json());
 // Adicionando rotas
 app.use(router)
 
-conn
+sequelize
 //.sync({force:true})
 .sync()
 .then(()=>{

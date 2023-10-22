@@ -1,20 +1,33 @@
-import { DataTypes } from "sequelize";
-import conn from "../db/conn";
+import { DataTypes, Model, Sequelize } from "sequelize";
+import {sequelize} from "../db/conn"
 
-const User = conn.define('User',{
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false
+class User extends Model {
+    public name: string;
+    public email: string;
+    public password: string
+}
+
+User.init(
+    {
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
     },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-})
+    {
+        sequelize,
+        modelName: 'User'
+    }
+)
+
 
 export default User;
 

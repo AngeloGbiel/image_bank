@@ -1,17 +1,21 @@
 import { Request, Response } from "express";
-import { ILogin } from "../Types/Types";
-import {genSalt, hash} from 'bcryptjs'
+import { IRegister,ILogin, UserDefine } from "../Types/Types";
+import {genSalt, hash, compare} from 'bcryptjs'
 import User from '../Models/User'
+
+interface IUserExist {
+    password: string
+}
 
 export default class UserController {
 
-    static async login(req: Request,res: Response){
+    static async register(req: Request,res: Response){
         const {
             name,
             email,
             password,
             confirmpassword
-        } = <ILogin> req.body
+        } = <IRegister> req.body
 
         //validar se o usuário preencheu todos os campos
         if(!name){
@@ -70,5 +74,43 @@ export default class UserController {
                 message: "Usuário criado com sucesso!!"
             })
         })
+    }
+    static async login(req: Request, res: Response){
+        const {
+            email, 
+            password
+        } = <ILogin> req.body;
+
+        //validar se o usuário preencheu todos os campos
+        if(!email){
+            return res.status(422).json({
+                message: 'O email é obrigatório'
+            })
+        }
+        if(!password){
+            return res.status(422).json({
+                message: 'A senha é obrigatório'
+            })
+        }
+
+        //Validar se o usuário existe
+        const UserExist = await User.findOne({
+            where:{email},
+            raw: true
+        })
+        if(!UserExist){
+            return res.status(422).json({
+                message: "Email ou senha incorreto"
+            })
+        }
+        
+        //validar se a senha está certa
+        const checkPassword = await compare(password, UserExist.password)
+        if(!checkPassword){
+            return res.status(422).json({
+                message: "Email ou senha incorreto"
+            })
+        }
+        
     }
 }
