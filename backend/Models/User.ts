@@ -5,7 +5,8 @@ class User extends Model {
     public id: number
     public name: string;
     public email: string;
-    public password: string
+    public password: string;
+    public image: string
 }
 
 User.init(
@@ -22,6 +23,9 @@ User.init(
             type: DataTypes.STRING,
             allowNull: false
         },
+        image: {
+            type: DataTypes.STRING
+        }
     },
     {
         sequelize,

@@ -5,8 +5,10 @@ import User from '../Models/User'
 import createToken from "../helpers/Create-token";
 import getToken from "../helpers/Get-token";
 
-interface IUserExist {
-    password: string
+interface InewUserEdit {
+    name: string,
+    email: string,
+    image: string
 }
 
 export default class UserController {
@@ -125,5 +127,34 @@ export default class UserController {
                 res.status(200).send(userData)
             })
         }
+    }
+    static async editUser(req: Request, res: Response){
+        const currentUserAuthenticate = getToken(req.headers.authorization!)
+        const currentUserData = await User.findOne({
+            where: {id: currentUserAuthenticate.id},
+            attributes: {exclude: ['password']},
+            raw: true
+        })
+        const {name, email} = req.body;
+        let image:string = ''
+        if(req.file){
+            image = req.file.filename
+        }
+        const newUserEdit:InewUserEdit = {
+            name: name || currentUserData!.name,
+            email: email || currentUserData!.email,
+            image: image || currentUserData!.image
+        }
+        await User.update(newUserEdit, {
+            where: {id: currentUserAuthenticate.id}
+        }).then(()=>{
+            res.status(200).json({
+                message: 'Atualizado com sucesso!!'
+            })
+        }).catch((err)=>{
+            res.status(422).json({
+                message: err
+            })
+        })
     }
 }

@@ -45,7 +45,7 @@ Agora, no arquivo **package.json** do backend, vamos alterar apenas esse bloco d
 ## Instalando dependências do Typescript
 
 ```bash
-npm i --save-dev @types/express @types/bcryptjs @types/jsonwebtoken
+npm i --save-dev @types/express @types/bcryptjs @types/jsonwebtoken @types/multer
 ```
 
 ## Criando conexão com o banco de dados
