@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { IRegister,ILogin, UserDefine } from "../Types/Types";
+import { IRegister,ILogin } from "../Types/Types";
 import {genSalt, hash, compare} from 'bcryptjs'
 import User from '../Models/User'
+import createToken from "../helpers/Create-token";
 
 interface IUserExist {
     password: string
@@ -69,10 +70,8 @@ export default class UserController {
         }
 
         //Salvar o usuário no banco de dados
-        await User.create(user).then(()=>{
-            return res.status(200).json({
-                message: "Usuário criado com sucesso!!"
-            })
+        await User.create(user).then((userData)=>{
+            createToken(userData, res)
         })
     }
     static async login(req: Request, res: Response){
@@ -111,6 +110,6 @@ export default class UserController {
                 message: "Email ou senha incorreto"
             })
         }
-        
+        createToken(UserExist, res)
     }
 }

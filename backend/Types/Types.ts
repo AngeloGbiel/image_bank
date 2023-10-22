@@ -1,5 +1,3 @@
-import { Model } from "sequelize";
-
 export interface IRegister {
     name: string,
     email: string,
@@ -11,9 +9,7 @@ export interface ILogin {
     password: string
 }
 
-export interface IAttributes{
+export interface IToken {
     name: string,
-    email: string,
-    password: string
+    id: number
 }
-export interface UserDefine extends Model<IAttributes> {}
