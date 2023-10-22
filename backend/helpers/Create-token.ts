@@ -5,14 +5,14 @@ import { IToken } from '../Types/Types';
 config()
 
 console.log(process.env.TOKEN_SECRET)
-const KeyTokenSecret = process.env.TOKEN_SECRET;
+const KeyTokenSecret = process.env.TOKEN_SECRET || 'chavemuitosupersecreta';
 
 const createToken = (user:IToken, res: Response) =>{
     const subject = String(user.id)
     const token = jwt.sign({
         name: user.name,
         id: user.id
-    },'KeyTokenSecret',{
+    },KeyTokenSecret,{
         subject: subject,
         expiresIn: '1h'
     })

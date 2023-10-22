@@ -3,6 +3,7 @@ import { IRegister,ILogin } from "../Types/Types";
 import {genSalt, hash, compare} from 'bcryptjs'
 import User from '../Models/User'
 import createToken from "../helpers/Create-token";
+import getToken from "../helpers/Get-token";
 
 interface IUserExist {
     password: string
@@ -111,5 +112,18 @@ export default class UserController {
             })
         }
         createToken(UserExist, res)
+    }
+    static async getUser(req: Request, res: Response){
+        const auth = req.headers.authorization;
+        if(auth){
+            const currentUserAuthenticate = getToken(auth)
+            const user = User.findOne({
+                where:{id: currentUserAuthenticate.id},
+                attributes: {exclude: ['password']},
+                raw: true
+            }).then((userData)=>{
+                res.status(200).send(userData)
+            })
+        }
     }
 }
