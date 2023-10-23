@@ -8,21 +8,9 @@ interface IBodyRequest {
     description?: string
 }
 
-interface Iimage {
-    file: {
-        filename: string
-    },
-    body: {
-        title: string,
-        description: string
-    },
-    headers: {
-        authorization: string
-    }
-}
 
 export default class ImagesControllers {
-    static async addImage(req: Iimage,res: Response){
+    static async addImage(req: Request,res: Response){
         const {title, description}:IBodyRequest = req.body
         let image:string = ''
         
@@ -67,6 +55,25 @@ export default class ImagesControllers {
             })
         }).catch((err)=>{
             console.log(err)
+        })
+    }
+
+    static async getImageByUser (req: Request, res: Response){
+        const currentUserAuthenticate = getToken(req.headers.authorization!)
+        const ImageOfCurrentUserAuthenticate = await Images.findAll({
+            where: {UserId: currentUserAuthenticate.id},
+            raw: true,
+            order: [['createdAt', 'DESC']]
+        }).then((response)=>{
+            res.status(200).send(response)
+        })
+    }
+
+    static async getAllImage (req: Request, res: Response){
+        await Images.findAll({
+            order: [['createdAt','ASC']]
+        }).then((response)=>{
+            return res.status(200).send(response)
         })
     }
 }
