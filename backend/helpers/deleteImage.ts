@@ -7,3 +7,9 @@ export const deleteImage = (image:string) =>{
         fs.unlinkSync(pathImage)
     }
 }
+export const deleteImageProfileAfterEdit = (image:string) =>{
+    const pathImage = path.join(__dirname,'../', 'public/images', image)
+    if(fs.existsSync(pathImage)){
+        fs.unlinkSync(pathImage)
+    }
+}

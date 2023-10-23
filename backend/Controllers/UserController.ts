@@ -5,11 +5,18 @@ import User from '../Models/User'
 import createToken from "../helpers/Create-token";
 import getToken from "../helpers/Get-token";
 import Images from "../Models/Images";
+import { deleteImageProfileAfterEdit } from "../helpers/deleteImage";
 
 interface InewUserEdit {
     name: string,
     email: string,
     image: string
+}
+
+interface IImage extends Request{
+    file: {
+        filename: string
+    }
 }
 
 export default class UserController {
@@ -129,7 +136,7 @@ export default class UserController {
             })
         }
     }
-    static async editUser(req: Request, res: Response){
+    static async editUser(req: IImage, res: Response){
         const currentUserAuthenticate = getToken(req.headers.authorization!)
         const currentUserData = await User.findOne({
             where: {id: currentUserAuthenticate.id},
@@ -145,6 +152,10 @@ export default class UserController {
             name: name || currentUserData!.name,
             email: email || currentUserData!.email,
             image: image || currentUserData!.image
+        }
+        if(currentUserData?.image){
+            deleteImageProfileAfterEdit(currentUserData!.image)
+            // deleta a imagem anterior sempre que o usuário for editado
         }
         User.update(newUserEdit, {
             where: {id: currentUserAuthenticate.id}
