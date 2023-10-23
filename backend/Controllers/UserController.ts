@@ -4,6 +4,7 @@ import {genSalt, hash, compare} from 'bcryptjs'
 import User from '../Models/User'
 import createToken from "../helpers/Create-token";
 import getToken from "../helpers/Get-token";
+import Images from "../Models/Images";
 
 interface InewUserEdit {
     name: string,
@@ -145,11 +146,23 @@ export default class UserController {
             email: email || currentUserData!.email,
             image: image || currentUserData!.image
         }
-        await User.update(newUserEdit, {
+        User.update(newUserEdit, {
             where: {id: currentUserAuthenticate.id}
         }).then(()=>{
-            res.status(200).json({
-                message: 'Atualizado com sucesso!!'
+            //Quando as informações do usuário mudar, vai atualizar os dados do usuário na imagem também
+            const newImageUpdate = {
+                user: {
+                    id_user: currentUserData!.id,
+                    name_user: name || currentUserData!.name,
+                    email_user: email || currentUserData!.email
+                },
+            }
+            Images.update(newImageUpdate,{
+                where: {UserId:currentUserAuthenticate.id}
+            }).then(()=>{
+                res.status(200).json({
+                    message: 'Atualizado com sucesso!!'
+                })
             })
         }).catch((err)=>{
             res.status(422).json({

@@ -82,7 +82,7 @@ export default class ImagesControllers {
     static async deleteImage (req:Request, res: Response){
         const id = req.params.id
         const currentUserAuthenticate = getToken(req.headers.authorization!)
-        const imageForDelete = Images.findOne({
+        await Images.findOne({
             where: {id}
         }).then((response)=>{
             if(response!.UserId != currentUserAuthenticate.id){
