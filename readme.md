@@ -70,3 +70,67 @@ create database imagebank;
 Agora estamos pronto para fazer a integração com o sequelize dentro do banco de dados
 
 ## Estrutura de pastas do backend
+- **controllers**: intermediario entre o Model e a View (parecido com os das rotas)
+  - **UserControllers.js**: manipulação dos usuários 
+  - **ImagesControllers.js**: manipulação das imagens
+- **db**: conexão com o banco de dados
+- **helpers**: para funcões sem locais de uso fixo (para ajudar)
+  - **Authenticate.js**: arquivo que verifica se existe um token e se ele é válido. Caso seja verdadeiro, dá ao usuário acesso a rotas privadas
+  - **Create-token.js**: arquivo que cria um token com base nas informações do usuário e manda para o front-end
+  - **get-token.js**: arquivo que retorna os dados do usuário com base no token fornecido
+  - **imagesUpload.js** utiliza a biblioteca multer para salvar as imagens
+    - no inicio do projeto, será usado para salvar localmente, e depois usaremos para salvar as imagens do banco de imagens em um bucket no s3
+  - **imageUserEdit.ts**: utiliza a biblioteca multer para salvar imagens do perfil do usuário
+    - no inicio do projeto, será usado para salvar localmente, e depois usaremos para salvar as imagens do perfil do usuário em um bucket no s3
+  - **deleteImage.ts**: esse arquivo possui duas funções, que servem:
+    - **deleteImage**: vai deletar uma imagem do banco de imagens do usuário sempre que ele solicitar a exclusão
+    - **deleteImageProfileAfterEdit**: vai deletar uma imagem sempre que o usuário trocar a foto de perfil (evitando o acúmulo de imagens não utilizadas)
+- **models**: interação com o banco de dados e com o controllers
+  - **User.js**: interação com o banco de dados do usuário (tabela **Users**)
+  - **Images.js**: interação com o banco de dados das imagens (tabela **Images**)
+- **routes**: conjunto de rotas com base do Controllers
+  - **UserRouter.js:** rotas para manipulação dos usuários dentro do banco
+  - **ImagesRoutes.js:** rotas para manipulação das imagens dentro do banco de dados
+- **public:** Diretório para salvar imagens
+  - **images:** salva todas as imagens, tanto do perfil do usuário, quanto as do banco de imagens
+
+# Frontend
+
+Para o frontend, vamos utilizar o **react** com a ferramente de construção **vite**. Primeiro, vamos executar o seguinte comando:
+```bash
+npm create vite@latest
+```
+Vamos colocar o nome do nosso arquivo de frontend, escolher o react e depois Typescript. Após isso, vamos executar os seguintes comando:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## Arquivos de configuração react
+- **.eslintrc.cjs**: é usado em projetos React (e em outros projetos JavaScript) para configurar as regras e as configurações do ESLint. ESLint é uma ótima ferramenta para ajudar a automatizar a padronização do código em nosso projeto. Com ela conseguimos definir regras de padronização, achar códigos fora do padrão e consertá-los automaticamente
+- **vite.config.ts**: esse arquivo é usado para configurar o Vite. Ele pode conter configurações relacionadas a plugins, roteamento, aliases de importação, entre outras coisas.
+- **tsconfig.json**: especifica os arquivos raiz e as configurações de compilação necessárias para o projeto. Projetos JavaScript podem ter um arquivo jsconfig. json , que tem quase o mesmo propósito, mas possui algumas flags do compilador relacionadas ao JavaScript que já estão habilitadas por padrão.
+
+## Instalando dependências react
+
+Instalando as bibliotecas de **css in js** e de **manipulação de rotas**
+```sh
+npm i styled-components react-router-dom react-hook-form js-cookie
+```
+- **styled-components:** biblioteca para React e React Native que permite que você escreva CSS no JavaScript. 
+- **react-router-dom:** biblioteca que permite que você configure rotas em sua aplicação, de modo que diferentes componentes sejam renderizados com base na URL atual. Isso é crucial para criar aplicativos de página única (SPA) e navegação sem recarregamento de página.
+- **react-hook-form:** biblioteca para gerenciamento de formulários em React. Ela permite que você crie formulários flexíveis e complexos com validação integrada.
+- **js-cookie:** js-cookie é uma biblioteca que facilita a leitura e a escrita de cookies no navegador usando JavaScript
+
+
+Instalando as dependências de TS das bibliotecas
+```sh
+npm i -D @types/styled-components @types/react-router-dom @types/js-cookie
+```
+
+## Erro de "arquivo não encontrado"
+Caso apareça um erro do arquivo tsconfig.json, vamos adcionar a seguinte linha de codígo ao arquivo:
+```json
+"include": ["src/**/*.ts", "src/**/*.tsx"]
+```
