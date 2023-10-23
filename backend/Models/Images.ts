@@ -23,7 +23,7 @@ Images.init({
         allowNull: true,
     },
     user: {
-        type: DataTypes.STRING,
+        type: DataTypes.JSON,
         allowNull: false,
     },
 },{
