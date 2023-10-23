@@ -134,3 +134,13 @@ Caso apareça um erro do arquivo tsconfig.json, vamos adcionar a seguinte linha 
 ```json
 "include": ["src/**/*.ts", "src/**/*.tsx"]
 ```
+
+## Rotas do frontend
+- **/:** página inicial
+- **/login:** rota para login
+- **/register:** rota para o registro
+- **/result/${result}**: rota que mostra o resultado
+- **/create:** rota para criar images
+- **/profile:** rota que mostra informações do perfil
+- **/myimages:** rota que mostra minhas imagens (podendo editar ou excluir)
+- **myimages/edit:** rota que vai permitir editar uma imagem
