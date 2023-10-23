@@ -7,6 +7,7 @@ class Images extends Model {
     title: string;
     description?: string;
     user: object;
+    UserId: number
 }
 
 Images.init({

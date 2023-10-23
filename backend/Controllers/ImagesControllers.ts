@@ -2,11 +2,13 @@ import { Request, Response } from "express";
 import getToken from "../helpers/Get-token";
 import User from '../Models/User'
 import Images from "../Models/Images";
+import { deleteImage } from "../helpers/deleteImage";
 
 interface IBodyRequest {
     title: string,
     description?: string
 }
+
 
 
 export default class ImagesControllers {
@@ -75,5 +77,63 @@ export default class ImagesControllers {
         }).then((response)=>{
             return res.status(200).send(response)
         })
+    }
+
+    static async deleteImage (req:Request, res: Response){
+        const id = req.params.id
+        const currentUserAuthenticate = getToken(req.headers.authorization!)
+        const imageForDelete = Images.findOne({
+            where: {id}
+        }).then((response)=>{
+            if(response!.UserId != currentUserAuthenticate.id){
+                return res.status(422).json({
+                    message: "Task Não encontrado"
+                })
+            }
+            deleteImage(response!.image)
+            Images.destroy({
+                where: {id}
+            }).then((response)=>{
+                return res.status(200).json({
+                    message: 'Imagem deletada com sucesso!!'
+                })
+            })
+        }).catch((err)=>{
+            return res.status(422).json({
+                message: "Task Não encontrado"
+            })
+        })
+
+    }
+
+    static async editImage(req:Request, res: Response){
+        const id = req.params.id 
+        const currentUserAuthenticate = getToken(req.headers.authorization!)
+        const {title, description}:IBodyRequest = req.body
+        await Images.findOne({
+            where: {id}
+        }).then((response)=>{
+            if(response?.UserId != currentUserAuthenticate.id){
+                return res.status(422).json({
+                    message: "Task Não encontrado"
+                }) 
+            }
+            const newImage = {
+                title: title || response!.title,
+                description: description || response!.description
+            }
+            Images.update(newImage, {
+                where: {id}
+            }).then(()=>{
+                return res.status(200).json({
+                    message: "Atualizado com sucesso"
+                })
+            })
+        }).catch((err)=>{
+            return res.status(422).json({
+                message: "Task Não encontrado"
+            })
+        })
+
     }
 }

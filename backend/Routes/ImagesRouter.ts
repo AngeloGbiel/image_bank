@@ -12,5 +12,7 @@ router.post(
   ImagesControllers.addImage
 );
 router.get("/imageuser", authenticate, ImagesControllers.getImageByUser);
+router.delete('/delete/:id', authenticate, ImagesControllers.deleteImage)
+router.patch('/edit/:id', authenticate, ImagesControllers.editImage)
 
 export default router;
