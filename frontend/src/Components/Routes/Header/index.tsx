@@ -15,7 +15,7 @@ const HeaderStyled = styled.div`
     display: flex;
     align-items: center;
     img {
-      width: 2.5rem;
+      width: 3rem;
     }
     div {
       display: flex;
@@ -23,22 +23,25 @@ const HeaderStyled = styled.div`
     }
   }
   .search {
-    width: 40%;
+    width: 45%;
     display: flex;
     position: relative;
     input {
       width: 100%;
+      height: 2.5rem;
       outline: none;
       border: none;
       border-radius: 28px;
       background: #c5c5c5;
       padding: 8px 15px;
+      font-size: 1rem;
     }
     label {
       position: absolute;
       left: 98%;
       top: 64%;
       transform: translate(-100%, -50%);
+      color: #00000090;
       font-size: 1.4rem;
       cursor: pointer;
     }
@@ -52,7 +55,7 @@ const HeaderStyled = styled.div`
   //fora de div
   .button {
     display: flex;
-    font-size: 1rem;
+    font-size: 1.2rem;
     padding: 5px 10px;
     border-radius: 30px;
     transition: 0.5s;
