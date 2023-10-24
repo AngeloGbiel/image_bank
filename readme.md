@@ -116,7 +116,7 @@ npm run dev
 
 Instalando as bibliotecas de **css in js** e de **manipulação de rotas**
 ```sh
-npm i styled-components react-router-dom react-hook-form js-cookie
+npm i styled-components react-router-dom react-hook-form js-cookie react-icons
 ```
 - **styled-components:** biblioteca para React e React Native que permite que você escreva CSS no JavaScript. 
 - **react-router-dom:** biblioteca que permite que você configure rotas em sua aplicação, de modo que diferentes componentes sejam renderizados com base na URL atual. Isso é crucial para criar aplicativos de página única (SPA) e navegação sem recarregamento de página.
@@ -143,4 +143,4 @@ Caso apareça um erro do arquivo tsconfig.json, vamos adcionar a seguinte linha 
 - **/create:** rota para criar images
 - **/profile:** rota que mostra informações do perfil
 - **/myimages:** rota que mostra minhas imagens (podendo editar ou excluir)
-- **myimages/edit:** rota que vai permitir editar uma imagem
+- **/myimages/edit:** rota que vai permitir editar uma imagem
