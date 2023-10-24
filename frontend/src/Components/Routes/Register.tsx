@@ -7,6 +7,8 @@ import * as Ri from "react-icons/ri";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IRegister } from "../Types";
 import { Button, IconButton, Snackbar } from "@mui/material";
+import { UserContext } from "../Context/UserContext";
+import { useContext } from "react";
 
 
 const RegisterStyled = styled.div`
@@ -76,27 +78,33 @@ const RegisterStyled = styled.div`
   }
 `;
 
+
+
 const Register = () => {
+  const {registerUser, open,messageError, handleClose} = useContext(UserContext)
+  let mensagem = ''
+  if(messageError){
+    mensagem = messageError.message
+  }
+  console.log(mensagem)
   const {
-    reset,
     handleSubmit,
     register,
   } = useForm<IRegister>();
   const onSubmit: SubmitHandler<IRegister> = async (data: IRegister) => {
-    reset();
-    console.log(data);
+    registerUser(data);
   };
 
   const action = (
     <>
-      <Button color="secondary" size="small" onClick={()=>''}>
+      <Button color="secondary" size="small" onClick={handleClose}>
         UNDO
       </Button>
       <IconButton
         size="small"
         aria-label="close"
         color="inherit"
-        onClick={()=>''} //handleclose
+        onClick={handleClose} //handleclose
       >
         {/* <CloseIcon fontSize="small" /> */}
       </IconButton>
@@ -106,10 +114,10 @@ const Register = () => {
   return (
     <RegisterStyled>
         <Snackbar
-            open={true}
-            autoHideDuration={6000}
-            onClose={()=>''}
-            message="Mensagem de erro"
+            open={open}
+            autoHideDuration={4000}
+            onClose={handleClose}
+            message={mensagem}
             action={action}
         />
       <img src={Profile} alt="" />
@@ -160,14 +168,14 @@ const Register = () => {
         {/* confirmPassword */}
 
         <div className="field">
-          <label htmlFor="confirmPassword">
+          <label htmlFor="confirmpassword">
             <Ri.RiLockPasswordFill/>
           </label>
           <input
             type="password"
-            id="confirmPassword"
+            id="confirmpassword"
             placeholder="Password"
-            {...register('confirmPassword')}
+            {...register('confirmpassword')}
           />
         </div>
         <input type="submit" value="Register" />

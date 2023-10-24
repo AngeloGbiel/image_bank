@@ -45,7 +45,7 @@ Agora, no arquivo **package.json** do backend, vamos alterar apenas esse bloco d
 ## Instalando dependências do Typescript
 
 ```bash
-npm i --save-dev @types/express @types/bcryptjs @types/jsonwebtoken @types/multer 
+npm i --save-dev @types/express @types/bcryptjs @types/jsonwebtoken @types/multer @types/cors
 ```
 
 ## Criando conexão com o banco de dados
@@ -116,7 +116,7 @@ npm run dev
 
 Instalando as bibliotecas de **css in js** e de **manipulação de rotas**
 ```sh
-npm i styled-components react-router-dom react-hook-form js-cookie react-icons @mui/material @emotion/react @emotion/styled
+npm i styled-components react-router-dom react-hook-form js-cookie react-icons @mui/material @emotion/react @emotion/styled axios
 ```
 - **styled-components:** biblioteca para React e React Native que permite que você escreva CSS no JavaScript. 
 - **react-router-dom:** biblioteca que permite que você configure rotas em sua aplicação, de modo que diferentes componentes sejam renderizados com base na URL atual. Isso é crucial para criar aplicativos de página única (SPA) e navegação sem recarregamento de página.
