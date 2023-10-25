@@ -10,6 +10,8 @@ export default function Auth() {
   const [messageError, setMessageError] = useState();
   const navigate = useNavigate();
   const [authenticate, setAuthenticate] = useState<boolean>(false);
+  const [select, setSelect] = useState<string>("home");
+  
 
   const handleClose = (
     event: React.SyntheticEvent | Event,
@@ -27,6 +29,7 @@ export default function Auth() {
       .then((response) => {
         authUser(response.data); //pega o token enviado pelo backend e manda para o authUser
         navigate("/");
+        setSelect('home')
       })
       .catch((err) => {
         setOpen(true);
@@ -38,6 +41,7 @@ export default function Auth() {
       .then((response) => {
         authUser(response.data);
         navigate("/");
+        setSelect('home')
       })
       .catch((err) => {
         setOpen(true);
@@ -56,5 +60,7 @@ export default function Auth() {
     messageError,
     authenticate,
     loginUser,
+    select,
+    setSelect
   };
 }

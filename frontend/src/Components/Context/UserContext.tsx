@@ -1,10 +1,11 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import { IContextProvider, IContextType } from "../Types";
 import Auth from "./Auth";
 
 const UserContext = createContext<IContextType>({} as IContextType);
 
 const UserProvider = ({ children }: IContextProvider) => {
+  const [search, setSearch] = useState<string>("");
   const {
     registerUser,
     handleClose,
@@ -12,6 +13,8 @@ const UserProvider = ({ children }: IContextProvider) => {
     messageError,
     authenticate,
     loginUser,
+    select,
+    setSelect
   } = Auth();
   return (
     <UserContext.Provider
@@ -22,6 +25,10 @@ const UserProvider = ({ children }: IContextProvider) => {
         messageError,
         authenticate,
         loginUser,
+        setSelect,
+        setSearch,
+        select,
+        search
       }}
     >
       {children}

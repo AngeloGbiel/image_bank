@@ -21,5 +21,9 @@ export interface IContextType {
     message: string;
   };
   authenticate: boolean;
-  loginUser: (user: ILogin) => Promise<void>;
+  loginUser: (user: ILogin) => Promise<void>,
+  setSelect: (select:string)=>void
+  select: string,
+  setSearch: (search:string)=> void
+  search: string
 }
