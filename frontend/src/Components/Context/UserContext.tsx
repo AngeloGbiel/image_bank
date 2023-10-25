@@ -14,7 +14,8 @@ const UserProvider = ({ children }: IContextProvider) => {
     authenticate,
     loginUser,
     select,
-    setSelect
+    setSelect,
+    token
   } = Auth();
   return (
     <UserContext.Provider
@@ -28,7 +29,8 @@ const UserProvider = ({ children }: IContextProvider) => {
         setSelect,
         setSearch,
         select,
-        search
+        search,
+        token
       }}
     >
       {children}

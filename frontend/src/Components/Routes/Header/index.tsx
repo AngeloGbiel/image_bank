@@ -8,7 +8,6 @@ import { UserContext } from "../../Context/UserContext";
 import {
   Avatar,
   Divider,
-  ListItemIcon,
   Menu,
   MenuItem,
   Tooltip,
@@ -206,20 +205,13 @@ const Header = () => {
               transformOrigin={{ horizontal: "right", vertical: "top" }}
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
-              <MenuItem onClick={handleClose}>
-                <Avatar /> Profile
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <Avatar /> My account
+              <MenuItem className="profileMenu" onClick={handleClose}>
+                <Avatar>
+                  <img style={{'width': '100%'}} src={Profile} alt="" />  
+                </Avatar> Profile
               </MenuItem>
               <Divider />
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <Md.MdPersonAdd fontSize="small" />
-                </ListItemIcon>
-                Add another account
-              </MenuItem>
-              <MenuItem onClick={handleClose}>Settings</MenuItem>
+              <MenuItem onClick={handleClose}>My Images</MenuItem>
               <MenuItem onClick={handleClose}>Logout</MenuItem>
             </Menu>
           </div>

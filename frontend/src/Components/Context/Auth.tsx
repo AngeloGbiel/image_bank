@@ -1,5 +1,5 @@
 // import Api from "../Api/Axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Api from "../Api/Axios";
 import { ILogin, IRegister } from "../Types";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,15 @@ export default function Auth() {
   const navigate = useNavigate();
   const [authenticate, setAuthenticate] = useState<boolean>(false);
   const [select, setSelect] = useState<string>("home");
+  const [token, setToken] = useState<string>('')
   
+  useEffect(()=>{
+    const tokenCookie = Cookies.get('token')
+    if(tokenCookie){
+      setToken(tokenCookie)
+      setAuthenticate(true)
+    }
+  },[])
 
   const handleClose = (
     event: React.SyntheticEvent | Event,
@@ -61,6 +69,7 @@ export default function Auth() {
     authenticate,
     loginUser,
     select,
-    setSelect
+    setSelect,
+    token
   };
 }
