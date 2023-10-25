@@ -17,6 +17,7 @@ const Header = () => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+    setSelect('')
   };
   const navigate = useNavigate();
   const { setSearch, search, setSelect, select, authenticate, logout } =
@@ -98,7 +99,7 @@ const Header = () => {
           <div className="rightLogin">
             {/* Image */}
 
-            <Tooltip className="profile" title="Profile">
+            <Tooltip onClick={()=>setSelect('')} className="profile" title="Profile">
               <Link to={"/profile"}>
                 <img src={Profile} alt="Profile" />
               </Link>

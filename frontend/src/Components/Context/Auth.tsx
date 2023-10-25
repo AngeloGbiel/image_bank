@@ -59,8 +59,7 @@ export default function Auth() {
 
   function logout(){
     Cookies.remove('token')
-    setAuthenticate(false)
-    navigate('/')
+    window.location.reload()
   }
 
   function authUser(token: string) {
