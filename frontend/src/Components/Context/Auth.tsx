@@ -57,6 +57,12 @@ export default function Auth() {
       });
   }
 
+  function logout(){
+    Cookies.remove('token')
+    setAuthenticate(false)
+    navigate('/')
+  }
+
   function authUser(token: string) {
     setAuthenticate(true); //autentica o usuário
     Cookies.set("token", token, { expires: 1 / 24 }); //Salva o token no cookie por 1 hora (1/24 = 1 hr do dia)
@@ -70,6 +76,7 @@ export default function Auth() {
     loginUser,
     select,
     setSelect,
-    token
+    token,
+    logout
   };
 }

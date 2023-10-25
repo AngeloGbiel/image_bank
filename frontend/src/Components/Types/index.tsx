@@ -26,5 +26,6 @@ export interface IContextType {
   select: string,
   setSearch: (search:string)=> void
   search: string,
-  token: string
+  token: string,
+  logout: ()=>void
 }

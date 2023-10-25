@@ -1,102 +1,13 @@
-import styled from "styled-components";
 import Logo from "../../../assets/logo.png";
 import * as Bi from "react-icons/bi";
 import * as Md from "react-icons/md";
+import * as Bs from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "../../Context/UserContext";
-import {
-  Avatar,
-  Divider,
-  Menu,
-  MenuItem,
-  Tooltip,
-} from "@mui/material";
+import { Avatar, Divider, MenuItem, Tooltip } from "@mui/material";
 import Profile from "../../../assets/avatar.jpg";
-
-const HeaderStyled = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.8rem 2rem;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  .left {
-    gap: 1.6rem;
-    display: flex;
-    align-items: center;
-    img {
-      width: 3rem;
-    }
-    div {
-      display: flex;
-      gap: 1rem;
-    }
-  }
-  .search {
-    width: 45%;
-    display: flex;
-    position: relative;
-    input {
-      width: 100%;
-      height: 2.5rem;
-      outline: none;
-      border: none;
-      border-radius: 28px;
-      background: #c5c5c5;
-      padding: 8px 15px;
-      font-size: 1rem;
-    }
-    label {
-      position: absolute;
-      left: 98%;
-      top: 64%;
-      transform: translate(-100%, -50%);
-      color: #00000090;
-      font-size: 1.4rem;
-      cursor: pointer;
-    }
-  }
-  .rightLogin {
-    gap: 0.5rem;
-    display: flex;
-    align-items: center;
-    .profile {
-      width: 3rem;
-      cursor: pointer;
-      img {
-        width: 100%;
-      }
-    }
-    .arrowDown{
-      cursor: pointer;
-    }
-  }
-  .right {
-    gap: 2rem;
-    display: flex;
-    align-items: center;
-    .profile {
-      width: 3rem;
-      cursor: pointer;
-      img {
-        width: 100%;
-      }
-    }
-  }
-
-  //fora de div
-  .button {
-    display: flex;
-    font-size: 1.2rem;
-    padding: 5px 10px;
-    border-radius: 30px;
-    transition: 0.5s;
-  }
-  .select {
-    background-color: #011722;
-    color: white;
-  }
-`;
+import { HeaderStyled, MenuStyled } from "./HeaderStyled";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -108,7 +19,7 @@ const Header = () => {
     setAnchorEl(null);
   };
   const navigate = useNavigate();
-  const { setSearch, search, setSelect, select, authenticate } =
+  const { setSearch, search, setSelect, select, authenticate, logout } =
     useContext(UserContext);
 
   const searchImages = () => {
@@ -185,18 +96,19 @@ const Header = () => {
             </label>
           </div>
           <div className="rightLogin">
-            
             {/* Image */}
 
             <Tooltip className="profile" title="Profile">
-              <img src={Profile} alt="Profile" />
+              <Link to={"/profile"}>
+                <img src={Profile} alt="Profile" />
+              </Link>
             </Tooltip>
 
             {/* Seta */}
             <div className="arrowDown" onClick={handleClick}>
               <Md.MdOutlineKeyboardArrowDown />
             </div>
-            <Menu
+            <MenuStyled
               anchorEl={anchorEl}
               id="account-menu"
               open={open}
@@ -206,14 +118,25 @@ const Header = () => {
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
               <MenuItem className="profileMenu" onClick={handleClose}>
-                <Avatar>
-                  <img style={{'width': '100%'}} src={Profile} alt="" />  
-                </Avatar> Profile
+                <Link className="LinkProfileMenu" to={"/profile"}>
+                  <Avatar>
+                    <img style={{ width: "100%" }} src={Profile} alt="" />
+                  </Avatar>{" "}
+                  Profile
+                </Link>
               </MenuItem>
               <Divider />
-              <MenuItem onClick={handleClose}>My Images</MenuItem>
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
-            </Menu>
+              <Link to={'/myimages'}>
+                <MenuItem className="option" onClick={handleClose}>
+                  <Bs.BsImages />
+                  My images
+                </MenuItem>
+              </Link>
+              <MenuItem className="option" onClick={logout}>
+                <Bi.BiLogOut />
+                Logout
+              </MenuItem>
+            </MenuStyled>
           </div>
         </>
       ) : (

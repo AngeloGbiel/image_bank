@@ -6,5 +6,6 @@ export const CSSreset = createGlobalStyle`
         padding: 0;
         box-sizing: border-box;
         font-family: 'Pattaya', sans-serif;
+        text-decoration: none;
     }
 `

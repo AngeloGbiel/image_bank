@@ -16,7 +16,7 @@ export default function Message() {
       onClose={handleClose}
     >
       <Alert
-        style={{ background: "#CB1818", color: "white"}}
+        style={{ background: "#CB1818", color: "#FFF"}}
         onClose={handleClose}
         severity="warning"
       >
