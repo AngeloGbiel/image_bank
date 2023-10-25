@@ -3,6 +3,7 @@ import { CSSreset } from "./Components/CSSreset";
 import Header from "./Components/Routes/Header";
 import { useEffect } from "react";
 import {UserProvider} from "./Components/Context/UserContext";
+import Message from "./Components/Utils/Message";
 
 export default function App(){
     const navigate = useNavigate()
@@ -14,6 +15,7 @@ export default function App(){
         <UserProvider>
             <CSSreset/>
             <Header/>
+            <Message/>
             <Outlet/>
         </UserProvider>
     )

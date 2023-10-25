@@ -1,15 +1,13 @@
 import styled from "styled-components";
 import Profile from "../../assets/avatar.jpg";
-
 import * as Md from "react-icons/md";
 import * as Ai from "react-icons/ai";
-
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IRegister } from "../Types";
-import { Button, IconButton, Snackbar } from "@mui/material";
+import { UserContext } from "../Context/UserContext";
+import { useContext } from "react";
 
-
-const LoginStyled = styled.div`
+const RegisterStyled = styled.div`
   /* background-color: red; */
   display: flex;
   justify-content: center;
@@ -76,56 +74,28 @@ const LoginStyled = styled.div`
   }
 `;
 
-const Login = () => {
-  const {
-    reset,
-    handleSubmit,
-    register,
-  } = useForm<IRegister>();
+const Register = () => {
+  const { loginUser } = useContext(UserContext);
+  const { handleSubmit, register } = useForm<IRegister>();
   const onSubmit: SubmitHandler<IRegister> = async (data: IRegister) => {
-    reset();
-    console.log(data);
+    loginUser(data);
   };
 
-  const action = (
-    <>
-      <Button color="secondary" size="small" onClick={()=>''}>
-        UNDO
-      </Button>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={()=>''} //handleclose
-      >
-        {/* <CloseIcon fontSize="small" /> */}
-      </IconButton>
-    </>
-  );
-
   return (
-    <LoginStyled>
-        <Snackbar
-            open={true}
-            autoHideDuration={6000}
-            onClose={()=>''}
-            message="Mensagem de erro"
-            action={action}
-        />
+    <RegisterStyled>
       <img src={Profile} alt="" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        
         {/* email */}
 
         <div className="field">
           <label htmlFor="email">
-            <Md.MdOutlineMail/>
+            <Md.MdOutlineMail />
           </label>
           <input
             type="email"
             id="email"
             placeholder="Email"
-            {...register('email')}
+            {...register("email")}
           />
         </div>
 
@@ -133,19 +103,18 @@ const Login = () => {
 
         <div className="field">
           <label htmlFor="password">
-            <Ai.AiFillLock/>
+            <Ai.AiFillLock />
           </label>
           <input
             type="password"
             id="password"
             placeholder="Password"
-            {...register('password')}
+            {...register("password")}
           />
         </div>
-
-        <input type="submit" value="Login" />
+        <input type="submit" value="Register" />
       </form>
-    </LoginStyled>
+    </RegisterStyled>
   );
 };
-export default Login;
+export default Register;

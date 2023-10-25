@@ -6,7 +6,6 @@ import * as Ai from "react-icons/ai";
 import * as Ri from "react-icons/ri";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IRegister } from "../Types";
-import { Button, IconButton, Snackbar } from "@mui/material";
 import { UserContext } from "../Context/UserContext";
 import { useContext } from "react";
 
@@ -81,12 +80,7 @@ const RegisterStyled = styled.div`
 
 
 const Register = () => {
-  const {registerUser, open,messageError, handleClose} = useContext(UserContext)
-  let mensagem = ''
-  if(messageError){
-    mensagem = messageError.message
-  }
-  console.log(mensagem)
+  const {registerUser} = useContext(UserContext)
   const {
     handleSubmit,
     register,
@@ -95,31 +89,8 @@ const Register = () => {
     registerUser(data);
   };
 
-  const action = (
-    <>
-      <Button color="secondary" size="small" onClick={handleClose}>
-        UNDO
-      </Button>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleClose} //handleclose
-      >
-        {/* <CloseIcon fontSize="small" /> */}
-      </IconButton>
-    </>
-  );
-
   return (
     <RegisterStyled>
-        <Snackbar
-            open={open}
-            autoHideDuration={4000}
-            onClose={handleClose}
-            message={mensagem}
-            action={action}
-        />
       <img src={Profile} alt="" />
       <form onSubmit={handleSubmit(onSubmit)}>
 

@@ -1,13 +1,20 @@
 // import Api from "../Api/Axios";
 import { useState } from "react";
 import Api from "../Api/Axios";
-import { IRegister } from "../Types";
+import { ILogin, IRegister } from "../Types";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function Auth() {
   const [open, setOpen] = useState<boolean>(false);
-  const [messageError, setMessageError] = useState()
+  const [messageError, setMessageError] = useState();
+  const navigate = useNavigate();
+  const [authenticate, setAuthenticate] = useState<boolean>(false);
 
-  const handleClose = (event: React.SyntheticEvent | Event,reason?: string) => {
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
     if (reason === "clickaway") {
       return;
     }
@@ -18,12 +25,36 @@ export default function Auth() {
   async function registerUser(user: IRegister) {
     await Api.post("/register", user)
       .then((response) => {
-        console.log(response.data);//pega o token
+        authUser(response.data); //pega o token enviado pelo backend e manda para o authUser
+        navigate("/");
       })
       .catch((err) => {
         setOpen(true);
         setMessageError(err.response.data);
       });
   }
-  return { registerUser,handleClose,open,messageError };
+  async function loginUser(user: ILogin) {
+    await Api.post("/login", user)
+      .then((response) => {
+        authUser(response.data);
+        navigate("/");
+      })
+      .catch((err) => {
+        setOpen(true);
+        setMessageError(err.response.data);
+      });
+  }
+
+  function authUser(token: string) {
+    setAuthenticate(true); //autentica o usuário
+    Cookies.set("token", token, { expires: 1 / 24 }); //Salva o token no cookie por 1 hora (1/24 = 1 hr do dia)
+  }
+  return {
+    registerUser,
+    handleClose,
+    open,
+    messageError,
+    authenticate,
+    loginUser,
+  };
 }

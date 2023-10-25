@@ -1,19 +1,25 @@
-import {ReactNode} from "react"
+import { ReactNode } from "react";
 
 export interface IRegister {
-    name: string,
-    email: string,
-    password: string,
-    confirmpassword: string,
+  name: string;
+  email: string;
+  password: string;
+  confirmpassword: string;
 }
 export interface IContextProvider {
-    children: ReactNode
+  children: ReactNode;
 }
-export interface IContextType{
-    registerUser: (user:IRegister) => Promise<void>,
-    open: boolean,
-    handleClose: (event: React.SyntheticEvent | Event,reason?: string) => void,
-    messageError?: {
-        message: string
-    }
+export interface ILogin {
+  email: string;
+  password: string;
+}
+export interface IContextType {
+  registerUser: (user: IRegister) => Promise<void>;
+  open: boolean;
+  handleClose: (event: React.SyntheticEvent | Event, reason?: string) => void;
+  messageError?: {
+    message: string;
+  };
+  authenticate: boolean;
+  loginUser: (user: ILogin) => Promise<void>;
 }
