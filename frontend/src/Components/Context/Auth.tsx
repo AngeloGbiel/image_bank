@@ -7,17 +7,17 @@ import Cookies from "js-cookie";
 
 export default function Auth() {
   const [open, setOpen] = useState<boolean>(false);
-  const [messageError, setMessageError] = useState();
-  const navigate = useNavigate();
   const [authenticate, setAuthenticate] = useState<boolean>(false);
+  const [messageError, setMessageError] = useState();
   const [select, setSelect] = useState<string>("home");
   const [token, setToken] = useState<string>('')
+  const [userAuthenticate, setUserAuthenticate] = useState<object>({})
+  const navigate = useNavigate();
   
   useEffect(()=>{
     const tokenCookie = Cookies.get('token')
     if(tokenCookie){
-      setToken(tokenCookie)
-      setAuthenticate(true)
+      getUserAuthenticate(tokenCookie)
     }
   },[])
 
@@ -57,14 +57,27 @@ export default function Auth() {
       });
   }
 
+  async function getUserAuthenticate(token: string){
+    Api.get('getuser',{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((response)=>{
+      setToken(token)
+      setAuthenticate(true); //autentica o usuário
+      setUserAuthenticate(response.data)
+    })
+  }
+  
+
   function logout(){
     Cookies.remove('token')
     window.location.reload()
   }
 
   function authUser(token: string) {
-    setAuthenticate(true); //autentica o usuário
     Cookies.set("token", token, { expires: 1 / 24 }); //Salva o token no cookie por 1 hora (1/24 = 1 hr do dia)
+    getUserAuthenticate(token)
   }
   return {
     registerUser,
@@ -76,6 +89,7 @@ export default function Auth() {
     select,
     setSelect,
     token,
-    logout
+    logout,
+    userAuthenticate,
   };
 }

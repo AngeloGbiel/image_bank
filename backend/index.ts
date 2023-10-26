@@ -19,6 +19,8 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(express.static('public'))
+
 // Adicionando rotas
 app.use(UserRouter)
 app.use('/images', ImagesRouter)

@@ -16,7 +16,8 @@ const UserProvider = ({ children }: IContextProvider) => {
     select,
     setSelect,
     token,
-    logout
+    logout,
+    userAuthenticate
   } = Auth();
   return (
     <UserContext.Provider
@@ -32,7 +33,8 @@ const UserProvider = ({ children }: IContextProvider) => {
         select,
         search,
         token,
-        logout
+        logout,
+        userAuthenticate
       }}
     >
       {children}

@@ -13,11 +13,7 @@ interface InewUserEdit {
     image: string
 }
 
-interface IImage extends Request{
-    file: {
-        filename: string
-    }
-}
+
 
 export default class UserController {
 
@@ -136,7 +132,7 @@ export default class UserController {
             })
         }
     }
-    static async editUser(req: IImage, res: Response){
+    static async editUser(req: Request, res: Response){
         const currentUserAuthenticate = getToken(req.headers.authorization!)
         const currentUserData = await User.findOne({
             where: {id: currentUserAuthenticate.id},

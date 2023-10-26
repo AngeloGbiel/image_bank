@@ -13,6 +13,14 @@ export interface ILogin {
   email: string;
   password: string;
 }
+
+
+export interface IProfile{
+  name: string;
+  email: string;
+  image: string;
+}
+
 export interface IContextType {
   registerUser: (user: IRegister) => Promise<void>;
   open: boolean;
@@ -27,5 +35,6 @@ export interface IContextType {
   setSearch: (search:string)=> void
   search: string,
   token: string,
-  logout: ()=>void
+  logout: ()=>void,
+  userAuthenticate: object
 }

@@ -17,11 +17,18 @@ const Header = () => {
   };
   const handleClose = () => {
     setAnchorEl(null);
-    setSelect('')
+    setSelect("");
   };
   const navigate = useNavigate();
-  const { setSearch, search, setSelect, select, authenticate, logout } =
-    useContext(UserContext);
+  const {
+    setSearch,
+    search,
+    setSelect,
+    select,
+    authenticate,
+    logout,
+    userAuthenticate,
+  } = useContext(UserContext);
 
   const searchImages = () => {
     if (search) {
@@ -30,13 +37,18 @@ const Header = () => {
     }
   };
 
+  const image =
+    "image" in userAuthenticate && userAuthenticate.image != null
+      ? `http://localhost:3000/images/${userAuthenticate.image}`
+      : "";
+
+  console.log(image ? "ola" : "ahdkajshdkjashdkjsa");
   const AddEnter = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key == "Enter" && search) {
       setSearch("");
       navigate(`result/${search}`);
     }
   };
-
   return (
     <HeaderStyled>
       {authenticate ? (
@@ -53,13 +65,14 @@ const Header = () => {
                 <Link
                   style={{
                     textDecoration: "none",
-                    color: select == "home" ? "white" : "black",
+                    color: select == "home" ? "white" : "#011722",
                   }}
                   to={"/"}
                 >
                   Pagina inicial
                 </Link>
               </div>
+
               {/* Criar */}
 
               <div
@@ -69,7 +82,7 @@ const Header = () => {
                 <Link
                   style={{
                     textDecoration: "none",
-                    color: select == "criar" ? "white" : "black",
+                    color: select == "criar" ? "white" : "#011722",
                   }}
                   to={"/create"}
                 >
@@ -99,9 +112,13 @@ const Header = () => {
           <div className="rightLogin">
             {/* Image */}
 
-            <Tooltip onClick={()=>setSelect('')} className="profile" title="Profile">
+            <Tooltip
+              onClick={() => setSelect("")}
+              className="profile"
+              title="Profile"
+            >
               <Link to={"/profile"}>
-                <img src={Profile} alt="Profile" />
+                <img src={image != "" ? image : Profile} alt="Profile" />
               </Link>
             </Tooltip>
 
@@ -121,13 +138,17 @@ const Header = () => {
               <MenuItem className="profileMenu" onClick={handleClose}>
                 <Link className="LinkProfileMenu" to={"/profile"}>
                   <Avatar>
-                    <img style={{ width: "100%" }} src={Profile} alt="" />
+                    <img
+                      style={{ width: "100%" }}
+                      src={image ? image : Profile}
+                      alt="Profile"
+                    />
                   </Avatar>{" "}
                   Profile
                 </Link>
               </MenuItem>
               <Divider />
-              <Link to={'/myimages'}>
+              <Link to={"/myimages"}>
                 <MenuItem className="option" onClick={handleClose}>
                   <Bs.BsImages />
                   My images
@@ -152,7 +173,7 @@ const Header = () => {
                 <Link
                   style={{
                     textDecoration: "none",
-                    color: select == "home" ? "white" : "black",
+                    color: select == "home" ? "white" : "#011722",
                   }}
                   to={"/"}
                 >
@@ -184,7 +205,7 @@ const Header = () => {
               <Link
                 style={{
                   textDecoration: "none",
-                  color: select == "login" ? "white" : "black",
+                  color: select == "login" ? "white" : "#011722",
                 }}
                 to={"/login"}
               >
@@ -198,7 +219,7 @@ const Header = () => {
               <Link
                 style={{
                   textDecoration: "none",
-                  color: select == "register" ? "white" : "black",
+                  color: select == "register" ? "white" : "#011722",
                 }}
                 to={"/register"}
               >

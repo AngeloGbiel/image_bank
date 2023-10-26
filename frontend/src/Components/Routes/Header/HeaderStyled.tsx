@@ -51,6 +51,7 @@ export const HeaderStyled = styled.div`
       width: 3rem;
       cursor: pointer;
       img {
+        border-radius: 50%;
         width: 100%;
       }
     }
