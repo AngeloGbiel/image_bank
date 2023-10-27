@@ -140,17 +140,22 @@ export default class UserController {
             raw: true
         })
         const {name, email} = req.body;
-        let image:string = ''
-        if(req.file){
-            image = req.file.filename
+        const userExist = await User.findOne({
+            where: {email},
+            raw: true
+        })
+        if(userExist){
+            return res.status(422).json({
+                message: 'Esse email já está em uso'
+            })
         }
+        let image:string = ''
+
         const newUserEdit:InewUserEdit = {
             name: name || currentUserData!.name,
             email: email || currentUserData!.email,
             image: image || currentUserData!.image
         }
-        console.log(currentUserData)
-        console.log(newUserEdit)
         if(currentUserData?.image && image){
             deleteImageProfileAfterEdit(currentUserData!.image)
             // deleta a imagem anterior sempre que o usuário for editado
