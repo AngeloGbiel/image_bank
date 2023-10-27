@@ -5,7 +5,18 @@ import Auth from "./Auth";
 const UserContext = createContext<IContextType>({} as IContextType);
 
 const UserProvider = ({ children }: IContextProvider) => {
+  const [editUser, SetEditUser] = useState<boolean>(false)
   const [search, setSearch] = useState<string>("");
+
+  const SetOpenModelEditUser = () => {
+    SetEditUser(true);
+  };
+
+  const SetCloseModelEditUser = () => {
+    SetEditUser(false);
+  };
+
+
   const {
     registerUser,
     handleClose,
@@ -34,7 +45,10 @@ const UserProvider = ({ children }: IContextProvider) => {
         search,
         token,
         logout,
-        userAuthenticate
+        userAuthenticate,
+        SetOpenModelEditUser,
+        SetCloseModelEditUser,
+        editUser
       }}
     >
       {children}

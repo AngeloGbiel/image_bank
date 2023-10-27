@@ -14,7 +14,6 @@ export interface ILogin {
   password: string;
 }
 
-
 export interface IProfile{
   name: string;
   email: string;
@@ -36,5 +35,8 @@ export interface IContextType {
   search: string,
   token: string,
   logout: ()=>void,
-  userAuthenticate: object
+  userAuthenticate: object,
+  SetOpenModelEditUser: () => void,
+  SetCloseModelEditUser: () => void,
+  editUser: boolean
 }

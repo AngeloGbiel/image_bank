@@ -4,9 +4,11 @@ import { IProfile } from "../../Types";
 import styled from "styled-components";
 import ProfileAvatar from "../../../assets/avatar.jpg";
 import Banner from "../../../assets/banner.jpg";
+import EditProfile from "./EditProfile";
 
 interface IUserContextType {
   userAuthenticate: IProfile;
+  SetOpenModelEditUser: () => void;
 }
 
 const ProfileStyled = styled.div`
@@ -47,7 +49,9 @@ const ProfileStyled = styled.div`
 `;
 
 export default function Profile() {
-  const { userAuthenticate } = useContext(UserContext) as IUserContextType;
+  const { userAuthenticate, SetOpenModelEditUser } = useContext(
+    UserContext
+  ) as IUserContextType;
   console.log(userAuthenticate);
   const image =
     "image" in userAuthenticate && userAuthenticate.image != null
@@ -70,8 +74,11 @@ export default function Profile() {
           <h2>Nome: {userAuthenticate.name}</h2>
           <h4>Email: {userAuthenticate.email}</h4>
         </div>
-        <button className="edit">Editar perfil</button>
+        <button onClick={SetOpenModelEditUser} className="edit">
+          Editar perfil
+        </button>
       </div>
+      <EditProfile />
     </ProfileStyled>
   );
 }

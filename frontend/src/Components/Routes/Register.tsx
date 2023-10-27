@@ -68,13 +68,6 @@ const RegisterStyled = styled.div`
       border: none;
     }
   }
-  span {
-    color: #d93025;
-    font-size: 16px;
-    margin-top: 3px;
-    text-align: center;
-    margin-top: -10px;
-  }
 `;
 
 
