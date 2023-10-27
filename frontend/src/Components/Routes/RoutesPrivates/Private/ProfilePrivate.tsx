@@ -7,7 +7,7 @@ export default function ProfilePrivate(){
     const {authenticate} = useContext(UserContext)
     return(
         <>
-            {authenticate ? (<Profile/>) : (NotAuth)}
+            {authenticate ? (<Profile/>) : (<NotAuth/>)}
         </>
     )
 }

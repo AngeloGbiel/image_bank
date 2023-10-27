@@ -41,8 +41,6 @@ const Header = () => {
     "image" in userAuthenticate && userAuthenticate.image != null
       ? `http://localhost:3000/images/${userAuthenticate.image}`
       : "";
-
-  console.log(image ? "ola" : "ahdkajshdkjashdkjsa");
   const AddEnter = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key == "Enter" && search) {
       setSearch("");

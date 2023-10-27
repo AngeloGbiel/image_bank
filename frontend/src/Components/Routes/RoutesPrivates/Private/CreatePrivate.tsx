@@ -7,7 +7,7 @@ export default function CreatePrivate(){
     const {authenticate} = useContext(UserContext)
     return(
         <>
-            {authenticate ? (<Create/>) : (NotAuth)}
+            {authenticate ? (<Create/>) : (<NotAuth/>)}
         </>
     )
 }

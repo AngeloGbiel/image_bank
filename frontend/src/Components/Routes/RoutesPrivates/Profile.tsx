@@ -52,7 +52,6 @@ export default function Profile() {
   const { userAuthenticate, SetOpenModelEditUser } = useContext(
     UserContext
   ) as IUserContextType;
-  console.log(userAuthenticate);
   const image =
     "image" in userAuthenticate && userAuthenticate.image != null
       ? `http://localhost:3000/images/${userAuthenticate.image}`

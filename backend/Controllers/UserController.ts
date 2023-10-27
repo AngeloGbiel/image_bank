@@ -149,7 +149,9 @@ export default class UserController {
             email: email || currentUserData!.email,
             image: image || currentUserData!.image
         }
-        if(currentUserData?.image){
+        console.log(currentUserData)
+        console.log(newUserEdit)
+        if(currentUserData?.image && image){
             deleteImageProfileAfterEdit(currentUserData!.image)
             // deleta a imagem anterior sempre que o usuário for editado
         }

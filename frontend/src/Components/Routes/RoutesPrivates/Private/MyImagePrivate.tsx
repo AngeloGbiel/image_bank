@@ -7,7 +7,7 @@ export default function MyImagePrivate(){
     const {authenticate} = useContext(UserContext)
     return(
         <>
-            {authenticate ? (<MyImage/>) : (NotAuth)}
+            {authenticate ? (<MyImage/>) : (<NotAuth/>)}
         </>
     )
 }

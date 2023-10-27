@@ -1,7 +1,7 @@
 // import Api from "../Api/Axios";
 import { useEffect, useState } from "react";
 import Api from "../Api/Axios";
-import { ILogin, IRegister } from "../Types";
+import { ILogin, IProfile, IRegister } from "../Types";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -10,16 +10,16 @@ export default function Auth() {
   const [authenticate, setAuthenticate] = useState<boolean>(false);
   const [messageError, setMessageError] = useState();
   const [select, setSelect] = useState<string>("home");
-  const [token, setToken] = useState<string>('')
-  const [userAuthenticate, setUserAuthenticate] = useState<object>({})
+  const [token, setToken] = useState<string>("");
+  const [userAuthenticate, setUserAuthenticate] = useState<object>({});
   const navigate = useNavigate();
-  
-  useEffect(()=>{
-    const tokenCookie = Cookies.get('token')
-    if(tokenCookie){
-      getUserAuthenticate(tokenCookie)
+
+  useEffect(() => {
+    const tokenCookie = Cookies.get("token");
+    if (tokenCookie) {
+      getUserAuthenticate(tokenCookie);
     }
-  },[])
+  }, []);
 
   const handleClose = (
     event: React.SyntheticEvent | Event,
@@ -37,7 +37,7 @@ export default function Auth() {
       .then((response) => {
         authUser(response.data); //pega o token enviado pelo backend e manda para o authUser
         navigate("/");
-        setSelect('home')
+        setSelect("home");
       })
       .catch((err) => {
         setOpen(true);
@@ -49,35 +49,61 @@ export default function Auth() {
       .then((response) => {
         authUser(response.data);
         navigate("/");
-        setSelect('home')
+        setSelect("home");
       })
       .catch((err) => {
         setOpen(true);
         setMessageError(err.response.data);
       });
   }
+  async function editUserProfile(user: IProfile) {
 
-  async function getUserAuthenticate(token: string){
-    Api.get('getuser',{
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then((response)=>{
-      setToken(token)
-      setAuthenticate(true); //autentica o usuário
-      setUserAuthenticate(response.data)
+    const UserData: Record<string,string> = {
+      name: user.name,
+      email: user.email,
+      image: user.image[0]
+    }
+
+    // Precisamos utilizar o FromData para manipular o envio de imagens
+    const formData = new FormData();
+    Object.keys(UserData).forEach((key)=>{
+      formData.append(key, UserData[key])
     })
-  }
-  
 
-  function logout(){
-    Cookies.remove('token')
-    window.location.reload()
+
+    await Api.patch("/edituser", formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        setOpen(true);
+        setMessageError(err.response.data);
+      });
+  }
+  async function getUserAuthenticate(token: string) {
+    Api.get("getuser", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => {
+      setToken(token);
+      setAuthenticate(true); //autentica o usuário
+      setUserAuthenticate(response.data);
+    });
+  }
+
+  function logout() {
+    Cookies.remove("token");
+    window.location.reload();
   }
 
   function authUser(token: string) {
     Cookies.set("token", token, { expires: 1 / 24 }); //Salva o token no cookie por 1 hora (1/24 = 1 hr do dia)
-    getUserAuthenticate(token)
+    getUserAuthenticate(token);
   }
   return {
     registerUser,
@@ -91,5 +117,6 @@ export default function Auth() {
     token,
     logout,
     userAuthenticate,
+    editUserProfile,
   };
 }

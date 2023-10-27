@@ -28,7 +28,8 @@ const UserProvider = ({ children }: IContextProvider) => {
     setSelect,
     token,
     logout,
-    userAuthenticate
+    userAuthenticate,
+    editUserProfile
   } = Auth();
   return (
     <UserContext.Provider
@@ -48,7 +49,8 @@ const UserProvider = ({ children }: IContextProvider) => {
         userAuthenticate,
         SetOpenModelEditUser,
         SetCloseModelEditUser,
-        editUser
+        editUser,
+        editUserProfile
       }}
     >
       {children}

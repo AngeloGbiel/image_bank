@@ -38,5 +38,6 @@ export interface IContextType {
   userAuthenticate: object,
   SetOpenModelEditUser: () => void,
   SetCloseModelEditUser: () => void,
-  editUser: boolean
+  editUser: boolean,
+  editUserProfile: (user:IProfile) =>Promise<void>
 }
