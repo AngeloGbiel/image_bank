@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { UserContext } from "../../Context/UserContext";
 import CloseIcon from "@mui/icons-material/Close";
+import Api from "../../Api/Axios";
 // import { IImageCreate } from "../../Types";
 
 const Transition = React.forwardRef(function Transition(
@@ -28,7 +29,8 @@ interface IUserContextType {
   SetOpenModelEditUser: () => void;
   editUser: boolean;
   setOpen: (open: boolean) => void;
-  setMessageError: (messageError: object) => void 
+  setMessageError: (messageError: object) => void,
+  token: string 
 }
 
 const CreateStyled = styled.form`
@@ -94,13 +96,13 @@ const DialogStyled = styled(Dialog)`
 `;
 
 interface IImageDataProps {
-  title: string | null
-  description: string | null
-  image: File | null
+  title: string 
+  description: string 
+  image: File 
 }
 
 export default function Create() {
-  const { SetCloseModelEditUser, editUser, SetOpenModelEditUser, setOpen, setMessageError } =
+  const { SetCloseModelEditUser, editUser, SetOpenModelEditUser, setOpen, setMessageError, token } =
     React.useContext(UserContext) as IUserContextType;
   const [file, setFile] = useState<File | Blob>();
   const [imageData, setImageData] = React.useState<IImageDataProps>({} as IImageDataProps);
@@ -120,14 +122,29 @@ export default function Create() {
   ) => {
     setImageData({ ...imageData, [e.target.name]: e.target.value });
   };
-  const SaveFile = () =>{
+  const SaveFile = async () =>{
     if(imageData.title == null){
       setOpen(true)
       setMessageError({message: 'Adcione um título'})
       return
     }
-    SetCloseModelEditUser()
-    console.log(imageData)
+    const UserData: Record<string, string | File> = {
+      title: imageData.title,
+      description: imageData.description || '',
+      image: imageData.image ,
+    };
+    const formData = new FormData();
+    Object.keys(UserData).forEach((key) => {
+      formData.append(key, UserData[key]);
+    });
+    await Api.post('/images/add',formData,{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then(()=>{
+      console.log('Imagem adcionada')
+      window.location.reload()
+    })
   }
   return (
     <CreateStyled>
