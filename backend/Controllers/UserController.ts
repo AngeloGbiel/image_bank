@@ -144,12 +144,15 @@ export default class UserController {
             where: {email},
             raw: true
         })
-        if(userExist){
+        if(userExist && currentUserData!.email != email){
             return res.status(422).json({
                 message: 'Esse email já está em uso'
             })
         }
         let image:string = ''
+        if(req.file){
+            image = req.file.filename
+        }
 
         const newUserEdit:InewUserEdit = {
             name: name || currentUserData!.name,

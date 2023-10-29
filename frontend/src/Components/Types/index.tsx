@@ -19,13 +19,18 @@ export interface IProfile{
   email: string;
   image: string;
 }
+export interface IImageCreate {
+  image: File,
+  title: string,
+  description?: string
+}
 
 export interface IContextType {
   registerUser: (user: IRegister) => Promise<void>;
   open: boolean;
   handleClose: (event: React.SyntheticEvent | Event, reason?: string) => void;
   messageError?: {
-    message: string;
+    message?: string;
   };
   authenticate: boolean;
   loginUser: (user: ILogin) => Promise<void>,
@@ -39,5 +44,7 @@ export interface IContextType {
   SetOpenModelEditUser: () => void,
   SetCloseModelEditUser: () => void,
   editUser: boolean,
-  editUserProfile: (user:IProfile) =>Promise<void>
+  editUserProfile: (user:IProfile) =>Promise<void>,
+  setMessageError: (messageError: object) => void,
+  setOpen: (open: boolean) => void
 }
