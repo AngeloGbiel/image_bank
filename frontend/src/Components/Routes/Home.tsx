@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Api from "../Api/Axios";
 import styled from "styled-components";
 import { IImageBankShowProps } from "../Types";
@@ -18,11 +17,12 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { UserContext } from "../Context/UserContext";
 
 const ImagesStyled = styled.div`
   width: 100%;
-  padding: 40px;
-  column-count: 4;
+  padding: 40px 20px 20px 20px;
+  column-count: 3;
   img {
     width: 100%;
     margin-bottom: 20px;
@@ -32,6 +32,7 @@ const ImagesStyled = styled.div`
 `;
 
 const Home = () => {
+  const { search } = useContext(UserContext);
   const [allImages, setAllImages] = useState<IImageBankShowProps[]>([]);
   const [openContainerViewDataImage, setOpenContainerViewDataImage] =
     useState<boolean>(false);
@@ -40,25 +41,29 @@ const Home = () => {
   );
   const urlImageLocalHost: string = `http://localhost:3000/images`;
   const [randomNumber, setRandomNumber] = useState<number[]>([]);
-  const [dateImage, setDateImage] = useState<string>('')
+  const [dateImage, setDateImage] = useState<string>("");
 
-  useEffect(() => {
+  const fetchImages = useCallback(async () => {
     Api.get("/images/allimages").then((response) => {
       setAllImages(response.data);
       getRandomNumber(response.data.length, 0, response.data.length - 1);
     });
   }, []);
 
+  useEffect(() => {
+    fetchImages(); //ela não será recriada a cada renderização do componente.
+  }, [fetchImages]);
+
   const ImageDataSelectView = (data: IImageBankShowProps) => {
     setImageDataSelect(data);
-    ImageDateCreated(data.createdAt)
+    ImageDateCreated(data.createdAt);
     setOpenContainerViewDataImage(true);
   };
 
   const getRandomNumber = (quant: number, min: number, max: number) => {
     const uniqueNumber = new Set<number>(); //resolver o problema de 'O tipo 'unknown' não pode ser atribuído ao tipo 'number'.ts'
     while (uniqueNumber.size < quant) {
-      if (uniqueNumber.size < 15) {
+      if (uniqueNumber.size < 20) {
         const number = Math.floor(Math.random() * (max - min + 1) + min);
         uniqueNumber.add(number);
       } else {
@@ -67,16 +72,41 @@ const Home = () => {
     }
     setRandomNumber(Array.from(uniqueNumber));
   };
-  const ImageDateCreated = (data:string) =>{
+  const ImageDateCreated = (data: string) => {
     const date = new Date(data);
-    setDateImage(date.toLocaleDateString())
-  }
+    setDateImage(date.toLocaleDateString());
+  };
 
-  const { id } = useParams();
   return (
     <>
-      {id ? (
-        <p>{id}</p>
+      {search ? (
+        <ImagesStyled>
+          {allImages
+            .filter((value: IImageBankShowProps) => {
+              const TitleNormalized = value.title.toLowerCase();
+              const DescriptionNormalized = value!.description!.toLowerCase();
+              return (
+                TitleNormalized.includes(search) ||
+                DescriptionNormalized.includes(search)
+              );
+            })
+            .map((value: IImageBankShowProps, key: number) => {
+              return (
+                <>
+                  <div
+                    key={key}
+                    onClick={() => ImageDataSelectView(value)}
+                    className="containerImage"
+                  >
+                    <img
+                      src={`${urlImageLocalHost}/${value.image}`}
+                      alt=""
+                    />
+                  </div>
+                </>
+              );
+            })}
+        </ImagesStyled>
       ) : (
         <ImagesStyled>
           {randomNumber.map((value: number, key: number) => {
