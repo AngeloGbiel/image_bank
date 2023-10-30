@@ -24,6 +24,12 @@ export interface IImageCreate {
   title: string,
   description?: string
 }
+export interface IImageBankShowProps {
+  id: number,
+  title: string,
+  description?: string,
+  image: string
+}
 
 export interface IContextType {
   registerUser: (user: IRegister) => Promise<void>;
