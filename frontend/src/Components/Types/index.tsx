@@ -28,7 +28,12 @@ export interface IImageBankShowProps {
   id: number,
   title: string,
   description?: string,
-  image: string
+  image: string,
+  user: {
+    name_user: string,
+    email_user: string
+  },
+  createdAt: string
 }
 
 export interface IContextType {
