@@ -14,6 +14,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Pagination,
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -34,21 +35,32 @@ const ImagesStyled = styled.div`
 const Home = () => {
   const { search } = useContext(UserContext);
   const [allImages, setAllImages] = useState<IImageBankShowProps[]>([]);
+  const [page, setPage] = useState<number>();
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [openContainerViewDataImage, setOpenContainerViewDataImage] =
     useState<boolean>(false);
+  const [dateImage, setDateImage] = useState<string>("");
+
   const [imageDataSelect, setImageDataSelect] = useState<IImageBankShowProps>(
     {} as IImageBankShowProps
   );
   const urlImageLocalHost: string = `http://localhost:3000/images`;
-  const [randomNumber, setRandomNumber] = useState<number[]>([]);
-  const [dateImage, setDateImage] = useState<string>("");
 
   const fetchImages = useCallback(async () => {
-    Api.get("/images/allimages").then((response) => {
-      setAllImages(response.data);
-      getRandomNumber(response.data.length, 0, response.data.length - 1);
-    });
-  }, []);
+    const startIndex = currentPage == 1 ? 0 : (currentPage - 1) * (15 - 1);
+    const endIndex = currentPage * (15 - 1);
+    const randomNumberArray:number[] = getRandomNumber(15, startIndex, endIndex);
+    await Api.get('/images/allimages').then((response)=>{
+      setPage(Math.ceil(response.data.length / 15));
+    })
+    await Api.get("/images/getimagesbypage", { params: { ids: randomNumberArray } })
+      .then((response) => {
+        setAllImages(response.data);
+      })
+      .catch((err) => {
+        throw err
+      });
+  }, [currentPage]);
 
   useEffect(() => {
     fetchImages(); //ela não será recriada a cada renderização do componente.
@@ -61,17 +73,14 @@ const Home = () => {
   };
 
   const getRandomNumber = (quant: number, min: number, max: number) => {
-    const uniqueNumber = new Set<number>(); //resolver o problema de 'O tipo 'unknown' não pode ser atribuído ao tipo 'number'.ts'
+    const uniqueNumber = new Set<number>();
     while (uniqueNumber.size < quant) {
-      if (uniqueNumber.size < 20) {
-        const number = Math.floor(Math.random() * (max - min + 1) + min);
-        uniqueNumber.add(number);
-      } else {
-        break;
-      }
+      const number = Math.floor(Math.random() * (max - min + 1) + min);
+      uniqueNumber.add(number);
     }
-    setRandomNumber(Array.from(uniqueNumber));
+    return Array.from(uniqueNumber);
   };
+
   const ImageDateCreated = (data: string) => {
     const date = new Date(data);
     setDateImage(date.toLocaleDateString());
@@ -98,32 +107,40 @@ const Home = () => {
                     onClick={() => ImageDataSelectView(value)}
                     className="containerImage"
                   >
-                    <img
-                      src={`${urlImageLocalHost}/${value.image}`}
-                      alt=""
-                    />
+                    <img src={`${urlImageLocalHost}/${value.image}`} alt="" />
                   </div>
                 </>
               );
             })}
         </ImagesStyled>
       ) : (
-        <ImagesStyled>
-          {randomNumber.map((value: number, key: number) => {
-            return (
-              <div
-                key={key}
-                onClick={() => ImageDataSelectView(allImages[value])}
-                className="containerImage"
-              >
-                <img
-                  src={`${urlImageLocalHost}/${allImages[value].image}`}
-                  alt=""
-                />
-              </div>
-            );
-          })}
-        </ImagesStyled>
+        <>
+          <ImagesStyled>
+            {allImages.map((value: IImageBankShowProps, key: number) => {
+              return (
+                <div
+                  key={key}
+                  onClick={() => ImageDataSelectView(value)}
+                  className="containerImage"
+                >
+                  <img src={`${urlImageLocalHost}/${value.image}`} alt="" />
+                </div>
+              );
+            })}
+          </ImagesStyled>
+          <Pagination
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "10px 0 10px 0",
+            }}
+            count={page}
+            onChange={(e, newPage) => {
+              setCurrentPage(newPage);
+              e;
+            }}
+          />
+        </>
       )}
 
       <Dialog

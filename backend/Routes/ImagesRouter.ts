@@ -4,6 +4,7 @@ import ImagesControllers from "../Controllers/ImagesControllers";
 import ImagesUpload from "../helpers/ImagesUpload";
 const router = Router();
 
+router.get('/getimagesbypage', ImagesControllers.getImageByPage)
 router.get('/allimages', ImagesControllers.getAllImage)
 router.post(
   "/add",

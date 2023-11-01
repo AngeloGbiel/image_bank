@@ -5,7 +5,6 @@ import { TransitionProps } from "@mui/material/transitions";
 import styled from "styled-components";
 import {
   AppBar,
-  Button,
   IconButton,
   TextField,
   Toolbar,
@@ -29,8 +28,8 @@ interface IUserContextType {
   SetOpenModelEditUser: () => void;
   editUser: boolean;
   setOpen: (open: boolean) => void;
-  setMessageError: (messageError: object) => void,
-  token: string 
+  setMessageError: (messageError: object) => void;
+  token: string;
 }
 
 const CreateStyled = styled.form`
@@ -85,10 +84,8 @@ const DialogStyled = styled(Dialog)`
       }
     }
   }
-  .action{
-    /* display: flex;
-    gap: 10%; */
-    button{
+  .action {
+    button {
       width: 50%;
       height: 3rem;
     }
@@ -96,16 +93,24 @@ const DialogStyled = styled(Dialog)`
 `;
 
 interface IImageDataProps {
-  title: string 
-  description: string 
-  image: File 
+  title: string;
+  description: string;
+  image: File;
 }
 
 export default function Create() {
-  const { SetCloseModelEditUser, editUser, SetOpenModelEditUser, setOpen, setMessageError, token } =
-    React.useContext(UserContext) as IUserContextType;
+  const {
+    SetCloseModelEditUser,
+    editUser,
+    SetOpenModelEditUser,
+    setOpen,
+    setMessageError,
+    token,
+  } = React.useContext(UserContext) as IUserContextType;
   const [file, setFile] = useState<File | Blob>();
-  const [imageData, setImageData] = React.useState<IImageDataProps>({} as IImageDataProps);
+  const [imageData, setImageData] = React.useState<IImageDataProps>(
+    {} as IImageDataProps
+  );
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event!.target!.files! && event.target.files.length > 0) {
@@ -114,7 +119,6 @@ export default function Create() {
       setFile(blob);
       setImageData({ ...imageData, image: file });
       SetOpenModelEditUser();
-      console.log(file);
     }
   };
   const handleUserChange = (
@@ -122,30 +126,30 @@ export default function Create() {
   ) => {
     setImageData({ ...imageData, [e.target.name]: e.target.value });
   };
-  const SaveFile = async () =>{
-    if(imageData.title == null){
-      setOpen(true)
-      setMessageError({message: 'Adcione um título'})
-      return
+  const SaveFile = async () => {
+    if (imageData.title == null) {
+      setOpen(true);
+      setMessageError({ message: "Adcione um título" });
+      return;
     }
     const UserData: Record<string, string | File> = {
       title: imageData.title,
-      description: imageData.description || '',
-      image: imageData.image ,
+      description: imageData.description || "",
+      image: imageData.image,
     };
     const formData = new FormData();
     Object.keys(UserData).forEach((key) => {
       formData.append(key, UserData[key]);
     });
-    await Api.post('/images/add',formData,{
+    await Api.post("/images/add", formData, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then(()=>{
-      console.log('Imagem adcionada')
-      window.location.reload()
-    })
-  }
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(() => {
+      console.log("Imagem adcionada");
+      window.location.reload();
+    });
+  };
   return (
     <CreateStyled>
       <p>Crie suas próprias postagens aqui</p>
@@ -164,17 +168,16 @@ export default function Create() {
             <IconButton
               edge="start"
               color="inherit"
-              onClick={SetCloseModelEditUser}
+              onClick={()=>{
+                window.location.reload()
+              }}
               aria-label="close"
             >
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Edit
+              Create
             </Typography>
-            <Button autoFocus color="inherit" onClick={SetCloseModelEditUser}>
-              save
-            </Button>
           </Toolbar>
         </AppBar>
 
@@ -207,14 +210,21 @@ export default function Create() {
               onChange={(e) => handleUserChange(e)}
             />
             <div className="action">
-              <button onClick={(e)=>{
-                e.preventDefault()
-                SetCloseModelEditUser()
-              }}>Cancelar</button>
-              <button onClick={(e)=>{
-                e.preventDefault(),
-                SaveFile()
-              }}>Salvar</button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.reload()
+                }}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault(), SaveFile();
+                }}
+              >
+                Salvar
+              </button>
             </div>
           </div>
         </form>
