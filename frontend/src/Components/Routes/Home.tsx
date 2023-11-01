@@ -2,23 +2,11 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import Api from "../Api/Axios";
 import styled from "styled-components";
 import { IImageBankShowProps } from "../Types";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import {
-  Avatar,
-  CardMedia,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Pagination,
-  Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import { UserContext } from "../Context/UserContext";
+import DialogUtils from "../Utils/Dialog";
 
 const ImagesStyled = styled.div`
   width: 100%;
@@ -49,16 +37,22 @@ const Home = () => {
   const fetchImages = useCallback(async () => {
     const startIndex = currentPage == 1 ? 0 : (currentPage - 1) * (15 - 1);
     const endIndex = currentPage * (15 - 1);
-    const randomNumberArray:number[] = getRandomNumber(15, startIndex, endIndex);
-    await Api.get('/images/allimages').then((response)=>{
+    const randomNumberArray: number[] = getRandomNumber(
+      15,
+      startIndex,
+      endIndex
+    );
+    await Api.get("/images/allimages").then((response) => {
       setPage(Math.ceil(response.data.length / 15));
+    });
+    await Api.get("/images/getimagesbypage", {
+      params: { ids: randomNumberArray },
     })
-    await Api.get("/images/getimagesbypage", { params: { ids: randomNumberArray } })
       .then((response) => {
         setAllImages(response.data);
       })
       .catch((err) => {
-        throw err
+        throw err;
       });
   }, [currentPage]);
 
@@ -142,56 +136,13 @@ const Home = () => {
           />
         </>
       )}
-
-      <Dialog
-        onClose={() => setOpenContainerViewDataImage(false)}
-        aria-labelledby="customized-dialog-title"
-        open={openContainerViewDataImage}
-      >
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          {imageDataSelect.title}
-        </DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={() => setOpenContainerViewDataImage(false)}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-        <DialogContent dividers>
-          <CardMedia
-            component={"img"}
-            image={`${urlImageLocalHost}/${imageDataSelect.image}`}
-          />
-          <Typography gutterBottom marginTop={5}>
-            {imageDataSelect.description
-              ? imageDataSelect.description
-              : `No have description`}
-          </Typography>
-          <List>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <BookmarkAddedIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={` Created by ${
-                  imageDataSelect &&
-                  imageDataSelect.user &&
-                  imageDataSelect.user.name_user
-                }`}
-                secondary={dateImage}
-              />
-            </ListItem>
-          </List>
-        </DialogContent>
-      </Dialog>
+      <DialogUtils
+        openContainerViewDataImage={openContainerViewDataImage}
+        imageDataSelect={imageDataSelect}
+        dateImage={dateImage}
+        setOpenContainerViewDataImage={setOpenContainerViewDataImage}
+        urlImageLocalHost={urlImageLocalHost}
+      />
     </>
   );
 };

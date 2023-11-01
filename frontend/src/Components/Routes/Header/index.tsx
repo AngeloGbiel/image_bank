@@ -2,7 +2,7 @@ import Logo from "../../../assets/logo.png";
 import * as Bi from "react-icons/bi";
 import * as Md from "react-icons/md";
 import * as Bs from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useRef, useState } from "react";
 import { UserContext } from "../../Context/UserContext";
 import { Avatar, Divider, MenuItem, Tooltip } from "@mui/material";
@@ -13,6 +13,7 @@ const Header = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);//Evita o erro "A propriedade 'value' não existe no tipo 'never'"
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate()
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -32,6 +33,8 @@ const Header = () => {
   const searchImages = () => {
     const searchValue = inputRef!.current!.value; //pegar o valor do input pelo label
     setSearch(searchValue);
+    navigate('/')
+    setSelect('home')
   };
 
   const image =
@@ -42,6 +45,8 @@ const Header = () => {
     const target = e.target as HTMLInputElement;
     if (e.key == "Enter") {
       setSearch(target.value)
+      navigate('/')
+      setSelect('home')
     }
   };
   return (

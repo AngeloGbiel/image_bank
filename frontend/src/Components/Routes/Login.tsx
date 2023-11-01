@@ -63,6 +63,7 @@ const RegisterStyled = styled.div`
       font-weight: 600;
       line-height: normal;
       border: none;
+      cursor: pointer;
     }
   }
 `;
