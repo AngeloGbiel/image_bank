@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Api from "../../Api/Axios";
 import { UserContext } from "../../Context/UserContext";
 import { IImageBankShowProps } from "../../Types";
@@ -44,6 +44,9 @@ const MyImagesStyled = styled.div`
 `;
 
 export default function MyImage() {
+
+  const IdDeleteRef = useRef<number>()
+  const [openDialogConfirmDelete,setOpenDialogConfirmDelete] = useState<boolean>(false)
   const urlImageLocalHost: string = `http://localhost:3000/images`;
   //para buscar a imagem
 
@@ -80,18 +83,21 @@ export default function MyImage() {
   }, [fetchImages]);
   //Usando o useCallback junto com o useEffect
 
-  const DeleteImage = async (id: number) => {
-    await Api.delete(`/images/delete/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(() => {
-        fetchImages();
+  const DeleteImage = async () => {
+    const id = IdDeleteRef.current
+    if(id){
+      await Api.delete(`/images/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch((err) => {
-        throw err;
-      });
+        .then(() => {
+          fetchImages();
+        })
+        .catch((err) => {
+          throw err;
+        });
+    }
   };
   //Função de deletar a imagem
 
@@ -133,7 +139,10 @@ export default function MyImage() {
                     <span onClick={() => DialogEditImage(value)}>
                       <Ai.AiFillEdit />
                     </span>
-                    <span onClick={() => DeleteImage(value.id)}>
+                    <span onClick={() => {
+                      IdDeleteRef.current = value.id
+                      setOpenDialogConfirmDelete(true)
+                    }}>
                       <Ai.AiFillDelete />
                     </span>
                     <span onClick={() => ImageDataSelectView(value)}>
@@ -152,6 +161,9 @@ export default function MyImage() {
         dateImage={dateImage}
         setOpenContainerViewDataImage={setOpenContainerViewDataImage}
         urlImageLocalHost={urlImageLocalHost}
+        setOpenDialogConfirmDelete={setOpenDialogConfirmDelete}
+        openDialogConfirmDelete={openDialogConfirmDelete}
+        DeleteImage={DeleteImage}
       />
       <DialogFullScreen
         editImage={editImage}
