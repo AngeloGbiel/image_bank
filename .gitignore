@@ -1,4 +1,2 @@
 node_modules
-*.png
-*.jpg
-*.jpeg
+db_docker

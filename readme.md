@@ -136,11 +136,24 @@ Caso apareça um erro do arquivo tsconfig.json, vamos adcionar a seguinte linha 
 ```
 
 ## Rotas do frontend
-- **/:** página inicial
+- **/:** página inicial com imagens
 - **/login:** rota para login
 - **/register:** rota para o registro
-- **/result/${result}**: rota que mostra o resultado
 - **/create:** rota para criar images
 - **/profile:** rota que mostra informações do perfil
 - **/myimages:** rota que mostra minhas imagens (podendo editar ou excluir)
-- **/myimages/edit:** rota que vai permitir editar uma imagem
+
+## Divisão de pastas
+- **assets**: algumas imagens estáticas do projeto
+- **Componentes**: pasta onde fica todos os componentes do projeto
+  - **Api**: realiza a chamada da api através da biblioteca axios
+  - **Context**:
+    - **Auth.tsx:** Arquivo gerenciamento de usuários e de autenticação
+    - **UserContext.tsx:** contexto nossa aplicação
+  - **Routes**: Pasta onde fica todas as rotas
+    - **Header**: estrutura do header (que não muda)
+    - **RoutesPrivates**: Rotas privadas que só podem ser acessadas se o token for válido
+      - **Private**: realiza a verificação do token e permite o usuário acessar a rota privada (ou não)
+  - **Types**: arquivo onde contém as interfaces mais utilizadas
+  - **Utils**: arquivo que contém algumas ferramentas que ajudam no projeto
+
