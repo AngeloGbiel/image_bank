@@ -2,9 +2,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import Api from "../Api/Axios";
 import styled from "styled-components";
 import { IImageBankShowProps } from "../Types";
-import {
-  Pagination,
-} from "@mui/material";
+import { Pagination } from "@mui/material";
 import { UserContext } from "../Context/UserContext";
 import DialogUtils from "../Utils/Dialog";
 
@@ -35,26 +33,36 @@ const Home = () => {
   const urlImageLocalHost: string = `http://localhost:3000/images`;
 
   const fetchImages = useCallback(async () => {
-    const startIndex = currentPage == 1 ? 0 : (currentPage - 1) * (15 - 1);
-    const endIndex = currentPage * (15 - 1);
-    const randomNumberArray: number[] = getRandomNumber(
-      15,
-      startIndex,
-      endIndex
-    );
     await Api.get("/images/allimages").then((response) => {
       setPage(Math.ceil(response.data.length / 15));
-    });
-    await Api.get("/images/getimagesbypage", {
-      params: { ids: randomNumberArray },
-    })
-      .then((response) => {
-        setAllImages(response.data);
+      const idsExtraidos = response.data.map((item:IImageBankShowProps) => item.id);
+      const startIndex = currentPage == 1 ? 0 : (currentPage - 1) * (15 - 1);
+      const endIndex = currentPage * (15 - 1);
+      const IdImageByCurrentPageView = idsExtraidos.slice(startIndex, endIndex);
+      const arrayWithRandomPosition = shuffleArray(IdImageByCurrentPageView) //vai exibir as imagens em posições aleatórias
+      Api.get("/images/getimagesbypage", {
+        params: { ids: arrayWithRandomPosition },
       })
-      .catch((err) => {
-        throw err;
-      });
+        .then((response) => {
+          setAllImages(response.data);
+        })
+        .catch((err) => {
+          throw err;
+        });
+    });
   }, [currentPage]);
+
+  function shuffleArray(array:number[]) {
+    // Loop em todos os elementos
+    for (let i = array.length - 1; i > 0; i--) {
+      // Escolhendo elemento aleatório
+      const j = Math.floor(Math.random() * (i + 1));
+      // Reposicionando elemento
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    // Retornando array com aleatoriedade
+    return array
+  }
 
   useEffect(() => {
     fetchImages(); //ela não será recriada a cada renderização do componente.
@@ -64,15 +72,6 @@ const Home = () => {
     setImageDataSelect(data);
     ImageDateCreated(data.createdAt);
     setOpenContainerViewDataImage(true);
-  };
-
-  const getRandomNumber = (quant: number, min: number, max: number) => {
-    const uniqueNumber = new Set<number>();
-    while (uniqueNumber.size < quant) {
-      const number = Math.floor(Math.random() * (max - min + 1) + min);
-      uniqueNumber.add(number);
-    }
-    return Array.from(uniqueNumber);
   };
 
   const ImageDateCreated = (data: string) => {

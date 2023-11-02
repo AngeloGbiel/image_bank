@@ -78,21 +78,21 @@ export default class ImagesControllers {
 
   static async getImageByPage(req: Request, res: Response) {
     const { ids } = req.query;
-    let idsString = ''
-    if(Array.isArray(ids)){
-        idsString = ids!.join(',')
+    let idsString = "";
+    if (Array.isArray(ids)) {
+      idsString = ids!.join(",");
     }
-    await Images.findAll({
-      where: {
-        id: ids,
-      },
-      order: [
-        sequelize.literal(`FIELD(id, ${idsString})`),
-      ],
-      raw: true,
-    }).then((response) => {
-      return res.status(200).send(response);
-    });
+    if (ids) {
+      await Images.findAll({
+        where: {
+          id: ids,
+        },
+        order: [sequelize.literal(`FIELD(id, ${idsString})`)],
+        raw: true,
+      }).then((response) => {
+        return res.status(200).send(response);
+      });
+    }
   }
 
   static async deleteImage(req: Request, res: Response) {
