@@ -5,33 +5,38 @@ import { IImageBankShowProps } from "../../Types";
 import * as Ai from "react-icons/ai"; //AiFillEdit AiFillDelete AiFillEye
 import styled from "styled-components";
 import DialogUtils from "../../Utils/Dialog";
+import DialogFullScreen from "../../Utils/DialogFullScreen";
 
 const MyImagesStyled = styled.div`
-  width: 100%;
-  padding: 40px 20px 20px 20px;
-  column-count: 4;
+  max-width: 80%;
+  margin: auto;
+  .imageContainer:nth-child(1) {
+    margin-top: 2rem;
+  }
   .imageContainer {
-    img {
-      width: 100%;
-      margin-bottom: -10px;
-      border-radius: 10px;
-      cursor: pointer;
-      border-right: 1px solid #000;
-      border-bottom: 1px solid #000;
-      border-left: 1px solid #000;
-      border-radius: 10px 10px 0px 0px;
+    height: 10rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    border-top: 0.3px solid black;
+    .image {
+      max-width: 70%;
+      display: flex;
+      gap: 5%;
+      align-items: center;
+      height: 95%;
+      word-break: break-word;
+      overflow: hidden;
+      img {
+        width: 30%;
+      }
     }
     .action {
-      padding: 10px 0 0 0;
       display: flex;
-      justify-content: space-around;
-      align-items: center;
-      font-size: 1.6rem;
-      border-right: 1px solid #000;
-      border-bottom: 1px solid #000;
-      border-left: 1px solid #000;
-      border-radius: 0px 0px 10px 10px;
+      gap: 1rem;
       span {
+        font-size: 2rem;
         cursor: pointer;
       }
     }
@@ -40,7 +45,13 @@ const MyImagesStyled = styled.div`
 
 export default function MyImage() {
   const urlImageLocalHost: string = `http://localhost:3000/images`;
-  const { token } = useContext(UserContext);
+  //para buscar a imagem
+
+  const [editImage, setEditImage] = useState<boolean>(false);
+  const [editImageData, setEditIMageData] = useState<IImageBankShowProps>(
+    {} as IImageBankShowProps
+  );
+  const [dateImage, setDateImage] = useState<string>("");
   const [imageBytokenForUser, setImageBytokenForUser] = useState<
     IImageBankShowProps[]
   >([]);
@@ -49,7 +60,11 @@ export default function MyImage() {
   const [imageDataSelect, setImageDataSelect] = useState<IImageBankShowProps>(
     {} as IImageBankShowProps
   );
-  const [dateImage, setDateImage] = useState<string>("");
+  //Os states da aplicação
+
+  const { token } = useContext(UserContext);
+  //pegando o token no Contexto
+
   const fetchImages = useCallback(async () => {
     await Api.get("/images/imageuser", {
       headers: {
@@ -63,6 +78,7 @@ export default function MyImage() {
   useEffect(() => {
     fetchImages();
   }, [fetchImages]);
+  //Usando o useCallback junto com o useEffect
 
   const DeleteImage = async (id: number) => {
     await Api.delete(`/images/delete/${id}`, {
@@ -77,6 +93,7 @@ export default function MyImage() {
         throw err;
       });
   };
+  //Função de deletar a imagem
 
   const ImageDataSelectView = (data: IImageBankShowProps) => {
     setImageDataSelect(data);
@@ -87,6 +104,12 @@ export default function MyImage() {
     const date = new Date(data);
     setDateImage(date.toLocaleDateString());
   };
+  //Função de mostrar o Dialog para exibir a imagem
+
+  const DialogEditImage = (data: IImageBankShowProps) => {
+    setEditIMageData(data);
+    setEditImage(true);
+  };
 
   return (
     <>
@@ -96,12 +119,18 @@ export default function MyImage() {
             (value: IImageBankShowProps, key: number) => {
               return (
                 <div key={key} className="imageContainer">
-                  <img
-                    src={`${urlImageLocalHost}/${value.image}`}
-                    alt={value.title}
-                  />
+                  <div className="image">
+                    <img
+                      src={`${urlImageLocalHost}/${value.image}`}
+                      alt={value.title}
+                    />
+                    <div className="infor">
+                      <h2>{value.title}</h2>
+                      <p> {value.description}</p>
+                    </div>
+                  </div>
                   <div className="action">
-                    <span>
+                    <span onClick={() => DialogEditImage(value)}>
                       <Ai.AiFillEdit />
                     </span>
                     <span onClick={() => DeleteImage(value.id)}>
@@ -123,6 +152,11 @@ export default function MyImage() {
         dateImage={dateImage}
         setOpenContainerViewDataImage={setOpenContainerViewDataImage}
         urlImageLocalHost={urlImageLocalHost}
+      />
+      <DialogFullScreen
+        editImage={editImage}
+        setEditImage={setEditImage}
+        editImageData={editImageData}
       />
     </>
   );

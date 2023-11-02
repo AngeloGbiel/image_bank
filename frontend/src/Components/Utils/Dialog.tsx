@@ -57,7 +57,7 @@ export default function DialogUtils({
             component={"img"}
             image={`${urlImageLocalHost}/${imageDataSelect.image}`}
           />
-          <Typography gutterBottom marginTop={5}>
+          <Typography style={{wordBreak: 'break-word'}} gutterBottom marginTop={5}>
             {imageDataSelect.description
               ? imageDataSelect.description
               : `No have description`}
