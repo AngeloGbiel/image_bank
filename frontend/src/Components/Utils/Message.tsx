@@ -4,9 +4,9 @@ import { UserContext } from "../Context/UserContext";
 
 export default function Message() {
   const { open, messageError, handleClose } = useContext(UserContext);
-  let message = "";
+  let message:string = "";
   if (messageError) {
-    message = messageError.message;
+    message = messageError!.message!;
   }
 
   return (

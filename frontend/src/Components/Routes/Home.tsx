@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { IImageBankShowProps } from "../Types";
 import { Pagination } from "@mui/material";
 import { UserContext } from "../Context/UserContext";
-import DialogUtils from "../Utils/Dialog";
+import DialogShowImage from "../Utils/DialogShowImage";
 
 const ImagesStyled = styled.div`
   width: 100%;
@@ -135,7 +135,7 @@ const Home = () => {
           />
         </>
       )}
-      <DialogUtils
+      <DialogShowImage
         openContainerViewDataImage={openContainerViewDataImage}
         imageDataSelect={imageDataSelect}
         dateImage={dateImage}

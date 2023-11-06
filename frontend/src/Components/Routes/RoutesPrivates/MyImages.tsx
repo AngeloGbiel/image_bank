@@ -4,7 +4,7 @@ import { UserContext } from "../../Context/UserContext";
 import { IImageBankShowProps } from "../../Types";
 import * as Ai from "react-icons/ai"; //AiFillEdit AiFillDelete AiFillEye
 import styled from "styled-components";
-import DialogUtils from "../../Utils/Dialog";
+import DialogMyImage from '../../Utils/DialogMyImage'
 import DialogFullScreen from "../../Utils/DialogFullScreen";
 
 const MyImagesStyled = styled.div`
@@ -155,7 +155,7 @@ export default function MyImage() {
           )}
         </div>
       </MyImagesStyled>
-      <DialogUtils
+      <DialogMyImage
         openContainerViewDataImage={openContainerViewDataImage}
         imageDataSelect={imageDataSelect}
         dateImage={dateImage}
