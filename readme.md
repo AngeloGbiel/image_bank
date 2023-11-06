@@ -157,3 +157,84 @@ Caso apareça um erro do arquivo tsconfig.json, vamos adcionar a seguinte linha 
   - **Types**: arquivo onde contém as interfaces mais utilizadas
   - **Utils**: arquivo que contém algumas ferramentas que ajudam no projeto
 
+# Dockerizando a aplicação
+
+**Backend**
+
+Primeiro, vamos criar um arquivo de **Dockerfile** para a criação do container da nossa aplicação node.js. 
+```Dockerfile
+FROM node:18-alpine
+WORKDIR /backend
+COPY package*.json ./
+RUN npm install -g npm@10.2.0 && npm install
+COPY . ./
+EXPOSE 3000
+CMD [ "npm", "start" ]
+```
+
+**Frontend**
+
+Agora, vamos criar um arquivo de **Dockerfile** para a aplicação react
+
+```Dockerfile
+FROM node:18-alpine as build 
+WORKDIR /app
+COPY package*.json ./
+RUN npm install -g npm@10.2.0 && npm install
+COPY . ./
+RUN npm run build
+EXPOSE 4000
+CMD ["npm","run","dev"]
+```
+
+Antes de criar o arquivo de docker-compose, precisamos realizar uma configuração na aplicação react para poder rodar dentro do container.
+
+Vamos no arquivo **vite.config.ts** e adcionar a seguinte linha de comando:
+
+```js
+export default defineConfig({
+  plugins: [react()],
+  server:{
+    host: true,
+    strictPort: true,
+    port: 4000
+  }
+})
+```
+
+**Docker compose**
+
+Em seguida, vamos criar o **docker-compose.yml**, onde vamos:
+- Construir nossa aplicação node.js (porta 3000)
+- Construir o container do mysql (porta 3306 interna e 3307 externa)
+  - Volume: arquivo **db** na raiz do projeto, porém não está incluido no repositório
+- Construir o container do phpMyAdmin para gerenciamento do banco de dados (porta 1234)
+  - http://localhost:1234 -> gerenciar o banco de dados pelo browser
+- Construir o container da aplicação react (porta 4000)
+
+Agora, vamos executar o seguinte comando:
+```sh
+docker-compose up -d --build ##vai construir os containers e rodar a aplicação
+```
+Podemos ver todos os containers rodando com o comando:
+```sh
+docker ps
+```
+E podemos visualizar os logs de cada container, e também acessa-los caso necessite:
+```sh
+docker logs hash_container -h #logs do container
+docker exec -it hash_container sh #acessar o container por um terminal sh
+```
+
+## Error de "network Error" ou Cors
+Para evitar esse erro, vamos no arquivo **index.js** no backend, e alterar a origin do cors para 'http://localhost' 
+
+E, se não resolver, vamos adcionar o seguinte bloco de código:
+```js
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost'); // Permitir solicitações do domínio http://localhost
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
+```

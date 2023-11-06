@@ -1,0 +1,46 @@
+version: "3.8"
+services:
+  db:
+    image: mysql:8.0.34-debian
+    restart: always
+    container_name: db_mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: "Ab12345*"
+        MYSQL_DATABASE: "imagebank"
+    ports:
+      - 3307:3306 #dentro:fora
+    volumes:
+      - ./db_docker/:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: PhpMyAdmin
+    environment:
+      MYSQL_ROOT_PASSWORD: "Ab12345*"
+    ports:
+      - 1234:80
+    depends_on:
+      - db
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: app_backend_node
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./backend/:/backend
+    depends_on:
+      - db
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: app_frontend_react
+    restart: always
+    ports:
+      - 80:4000
+    volumes:
+      - ./frontend/:/frontend
+    depends_on:
+      - db
