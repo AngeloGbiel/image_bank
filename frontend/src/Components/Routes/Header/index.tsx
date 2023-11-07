@@ -10,10 +10,10 @@ import Profile from "../../../assets/avatar.jpg";
 import { HeaderStyled, MenuStyled } from "./HeaderStyled";
 
 const Header = () => {
-  const inputRef = useRef<HTMLInputElement | null>(null);//Evita o erro "A propriedade 'value' não existe no tipo 'never'"
+  const inputRef = useRef<HTMLInputElement | null>(null); //Evita o erro "A propriedade 'value' não existe no tipo 'never'"
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -33,20 +33,21 @@ const Header = () => {
   const searchImages = () => {
     const searchValue = inputRef!.current!.value; //pegar o valor do input pelo label
     setSearch(searchValue);
-    navigate('/')
-    setSelect('home')
+    navigate("/");
+    setSelect("home");
   };
 
   const image =
     "image" in userAuthenticate && userAuthenticate.image != null
-      ? `http://localhost:3000/images/${userAuthenticate.image}`
+      ? `https://imagebank-profile-user-s3.s3.amazonaws.com/${userAuthenticate.image}`
       : "";
+  console.log('test')
   const AddEnter = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const target = e.target as HTMLInputElement;
     if (e.key == "Enter") {
-      setSearch(target.value)
-      navigate('/')
-      setSelect('home')
+      setSearch(target.value);
+      navigate("/");
+      setSelect("home");
     }
   };
   return (
