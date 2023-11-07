@@ -110,7 +110,6 @@ const Home = () => {
         <>
           <ImagesStyled>
             {allImages.map((value: IImageBankShowProps, key: number) => {
-              console.log(value.image)
               return (
                 <div
                   key={key}

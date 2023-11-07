@@ -139,10 +139,17 @@ export default class UserController {
       });
     }
 
+    interface CustomFile extends File {
+      key: string;
+    }
 
-    let image:string = "";
+    let image = "";
     if (req.file) {
-      image = req.file.key;
+      "key" in req.file &&
+      req.file.key != undefined &&
+      typeof req.file.key == "string"
+        ? (image = req.file.key)
+        : (image = "");
     }
 
     const newUserEdit: InewUserEdit = {

@@ -5,14 +5,14 @@ import { ILogin, IProfile, IRegister } from "../Types";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-interface test {
+interface IMessageString {
   message?: string
 }
 
 export default function Auth() {
   const [open, setOpen] = useState<boolean>(false);
   const [authenticate, setAuthenticate] = useState<boolean>(false);
-  const [messageError, setMessageError] = useState<object>({} as test);
+  const [messageError, setMessageError] = useState<object>({} as IMessageString);
   const [select, setSelect] = useState<string>("home");
   const [token, setToken] = useState<string>("");
   const [userAuthenticate, setUserAuthenticate] = useState<object>({});

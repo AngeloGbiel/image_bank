@@ -16,10 +16,13 @@ export default class ImagesControllers {
   static async addImage(req: Request, res: Response) {
     const { title, description }: IBodyRequest = req.body;
     let image: string = "";
-    console.log(req.file,'test')
     //validações
     if (req.file) {
-      image = req.file.key;
+      "key" in req.file &&
+      req.file.key != undefined &&
+      typeof req.file.key == "string"
+        ? (image = req.file.key)
+        : (image = "");
     } else {
       return res.status(422).json({ message: "Imagem é obrigatória" });
     }
@@ -47,7 +50,6 @@ export default class ImagesControllers {
     };
 
     //Salvar a imagem no banco de dados
-    // console.log(newImageUpdate)
     await Images.create(newImageUpdate)
       .then(() => {
         return res.status(200).json({

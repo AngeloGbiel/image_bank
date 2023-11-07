@@ -41,7 +41,6 @@ const Header = () => {
     "image" in userAuthenticate && userAuthenticate.image != null
       ? `https://imagebank-profile-user-s3.s3.amazonaws.com/${userAuthenticate.image}`
       : "";
-  console.log('test')
   const AddEnter = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const target = e.target as HTMLInputElement;
     if (e.key == "Enter") {

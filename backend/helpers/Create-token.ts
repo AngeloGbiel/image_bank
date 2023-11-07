@@ -4,7 +4,6 @@ import {config} from 'dotenv'
 import { IToken } from '../Types/Types';
 config()
 
-console.log(process.env.TOKEN_SECRET)
 const KeyTokenSecret = process.env.TOKEN_SECRET || 'chavemuitosupersecreta';
 
 const createToken = (user:IToken, res: Response) =>{
