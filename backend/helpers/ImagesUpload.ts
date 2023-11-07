@@ -1,29 +1,28 @@
 import multer from "multer";
-import path from 'path'
+import path from "path";
+import S3Config from "./S3Config";
+import multerS3 from "multer-s3";
 
-const imageStorage  = multer.diskStorage({
-    //definir onde a imagem será salva
-    destination: (req,file,cb) => {
-        cb(null, 'public/images') //função de callback onde o "null" indica que não houve erros
-    },
-    filename: (req,file,cb) => {
-        cb(
-            null,
-            Date.now() +
-            String(Math.floor(Math.random() * 100)) + 
-            path.extname(file.originalname)  //extension (.png,jpeg,etc)
-            // todas essas configurações acima faz com que o arquivo tenha um nome único
-        )
-    }
-});
+const bucket = process.env.BUCKET_IMAGES_UPLOAD;
+
 const ImageUpload = multer({
-    storage:imageStorage,
-    fileFilter(req,file,cb) {
-        if(!file.originalname.match(/\.(png|jpg|jpeg)$/)){
-          // upload only png, jpg and jpeg format
-          return cb(new Error("Please only send png or jpg!"));
-        }
-        cb(null, true) //null -> não há erros. true -> envie e processe as informações
-    }
-})
+  storage: multerS3({
+    s3: S3Config,
+    bucket: `${bucket}`,
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function (req, file, cb) {
+      cb(
+        null,
+        Date.now() +
+          String(Math.floor(Math.random() * 100)) +
+          path.extname(file.originalname) //extension (.png,jpeg,etc)
+        // todas essas configurações acima faz com que o arquivo tenha um nome único
+      );
+    },
+  }),
+});
+
 export default ImageUpload;

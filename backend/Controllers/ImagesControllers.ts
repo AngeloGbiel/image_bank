@@ -4,6 +4,8 @@ import User from "../Models/User";
 import Images from "../Models/Images";
 import { deleteImage } from "../helpers/deleteImage";
 import { sequelize } from "../db/conn";
+import S3Config from "../helpers/S3Config";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
 
 interface IBodyRequest {
   title: string;
@@ -14,10 +16,10 @@ export default class ImagesControllers {
   static async addImage(req: Request, res: Response) {
     const { title, description }: IBodyRequest = req.body;
     let image: string = "";
-
+    console.log(req.file,'test')
     //validações
     if (req.file) {
-      image = req.file.filename;
+      image = req.file.key;
     } else {
       return res.status(422).json({ message: "Imagem é obrigatória" });
     }

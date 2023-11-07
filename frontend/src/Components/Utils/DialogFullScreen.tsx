@@ -80,7 +80,7 @@ export default function DialogFullScreen({
   ) => {
     setImageData({ ...imageData, [e.target.name]: e.target.value });
   };
-  const urlImageLocalHost: string = `http://localhost:3000/images/${
+  const urlImageLocalHost: string = `https://imagebank-images-upload-s3.s3.amazonaws.com/${
     editImageData!.image
   }`;
 

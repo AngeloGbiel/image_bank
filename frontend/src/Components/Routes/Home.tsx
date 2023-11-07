@@ -30,7 +30,7 @@ const Home = () => {
   const [imageDataSelect, setImageDataSelect] = useState<IImageBankShowProps>(
     {} as IImageBankShowProps
   );
-  const urlImageLocalHost: string = `http://localhost:3000/images`;
+  const urlImageLocalHost: string = `https://imagebank-images-upload-s3.s3.amazonaws.com`;
 
   const fetchImages = useCallback(async () => {
     await Api.get("/images/allimages").then((response) => {
@@ -110,6 +110,7 @@ const Home = () => {
         <>
           <ImagesStyled>
             {allImages.map((value: IImageBankShowProps, key: number) => {
+              console.log(value.image)
               return (
                 <div
                   key={key}

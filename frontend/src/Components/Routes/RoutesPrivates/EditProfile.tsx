@@ -34,7 +34,7 @@ interface IUserContextType {
   userAuthenticate: IProfile;
   SetCloseModelEditUser: () => void;
   editUser: boolean;
-  editUserProfile: (user:IProfile) =>Promise<void>;
+  editUserProfile: (user: IProfile) => Promise<void>;
 }
 
 const ModelEditInfoStyled = styled.div`
@@ -109,12 +109,12 @@ export default function EditProfile() {
     React.useContext(UserContext) as IUserContextType;
   const image =
     "image" in userAuthenticate && userAuthenticate.image != null
-      ? `http://localhost:3000/images/${userAuthenticate.image}`
+      ? `https://imagebank-profile-user-s3.s3.amazonaws.com/${userAuthenticate.image}`
       : "";
   const { handleSubmit, register, reset } = useForm<IProfile>();
   const onSubmit: SubmitHandler<IProfile> = async (data: IProfile) => {
-    editUserProfile(data)
-    reset()
+    editUserProfile(data);
+    reset();
   };
   return (
     <div>
@@ -137,7 +137,12 @@ export default function EditProfile() {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Edit
             </Typography>
-            <Button onClickCapture={handleSubmit(onSubmit)} autoFocus color="inherit" onClick={SetCloseModelEditUser}>
+            <Button
+              onClickCapture={handleSubmit(onSubmit)}
+              autoFocus
+              color="inherit"
+              onClick={SetCloseModelEditUser}
+            >
               save
             </Button>
           </Toolbar>

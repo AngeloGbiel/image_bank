@@ -47,7 +47,7 @@ export default function MyImage() {
 
   const IdDeleteRef = useRef<number>()
   const [openDialogConfirmDelete,setOpenDialogConfirmDelete] = useState<boolean>(false)
-  const urlImageLocalHost: string = `http://localhost:3000/images`;
+  const urlImageLocalHost: string = `https://imagebank-images-upload-s3.s3.amazonaws.com`;
   //para buscar a imagem
 
   const [editImage, setEditImage] = useState<boolean>(false);

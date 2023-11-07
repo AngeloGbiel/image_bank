@@ -54,7 +54,7 @@ export default function Profile() {
   ) as IUserContextType;
   const image =
     "image" in userAuthenticate && userAuthenticate.image != null
-      ? `http://localhost:3000/images/${userAuthenticate.image}`
+      ? `https://imagebank-profile-user-s3.s3.amazonaws.com/${userAuthenticate.image}`
       : "";
   return (
     <ProfileStyled>
