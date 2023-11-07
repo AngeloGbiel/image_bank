@@ -238,3 +238,25 @@ app.use((req, res, next) => {
     next();
 });
 ```
+
+# Usando o serviço de S3 da amazon
+
+Primeiro, vamos criar duas buckets no amazon S3
+- a primeira chamada **imagebank-profile-user-s3** para salvar a foto de perfil do usuário
+- e a segunda chamada **imagebank-images-upload-s3** para salvar as imagens feitas por apload
+
+Agora, vamos instalar as seguintes dependências no backend:
+```bash
+npm install @aws-sdk/client-s3 multer-s3
+```
+E também a dependência do ts para o multer-s3
+```bash
+npm i -D @types/multer-s3"
+```
+
+- **multer-s3**: O multer-s3 é um pacote que estende as funcionalidades do multer para facilitar o upload de arquivos diretamente para o Amazon S3. Ele fornece uma maneira conveniente de configurar o multer para enviar arquivos para um bucket específico no S3, incluindo detalhes como autenticação, permissões de acesso e gerenciamento de metadados dos objetos no S3.
+
+- **@aws-sdk/client-s3:** é uma parte do AWS SDK para JavaScript versão 3 (v3) que fornece uma interface para interagir com o serviço Amazon S3 (Simple Storage Service) usando JavaScript moderno e assíncrono, como Promises e async/await.
+
+Agora, vamos criar mais um arquivo no diretório /backend/helpers chamado S3Config, onde vamos colocar a configuração de acesso a AWS (lembrando que é necessário ter um usuário com acesso programático, e informar a chave de acesso e a chave secreta). Depois, vamos editar os arquivos de helpers que realiza o upload local para poder salvar e deletar as imagens nos respectivos buckets.
+
