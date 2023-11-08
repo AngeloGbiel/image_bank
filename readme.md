@@ -260,3 +260,18 @@ npm i -D @types/multer-s3"
 
 Agora, vamos criar mais um arquivo no diretório /backend/helpers chamado S3Config, onde vamos colocar a configuração de acesso a AWS (lembrando que é necessário ter um usuário com acesso programático, e informar a chave de acesso e a chave secreta). Depois, vamos editar os arquivos de helpers que realiza o upload local para poder salvar e deletar as imagens nos respectivos buckets.
 
+# Criando um banco de dados com RDS e Mysql na aws
+
+No console da AWS, vamos nos serviços de RDS e criar um banco de dados:
+- Selecionando o free tier
+- Selecionando o Mysql
+- Colocando o nome como imagebank001
+- Colocar a senha como Ab12345*
+- Colocar o usuário como root
+- habilitar o acesso público
+Depois, precisaremos editar o arquivo **/backend/dn/conn.ts** lembrando de passar o Endpoint do RDS como host da aplicação.
+
+Para visualizarmos os dados, podemos executar o seguinte comando no terminal local:
+```bash
+mysql -h nome-do-host-do-rds -u nome-de-usuario -p
+```
